@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require './route'
-require './station'
+require './lib/route'
+require './lib/station'
 
 describe Route do
   before(:each) do
