@@ -62,8 +62,6 @@ describe Train do
     end
 
     it 'raises error if on start' do
-      @train.backward
-
       expect { @train.backward }.to raise_error(RuntimeError, 'Движение назад невозможно')
     end
   end

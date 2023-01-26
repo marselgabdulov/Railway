@@ -8,6 +8,8 @@
 # Train can moves between stations along the route forward and backward by one
 # station per step.
 # Shows previous, current and next stations on the route.
+
+# TODO заменить объект current_station на current_station_index и попровить тесты
 class Train
   attr_reader :speed, :number_of_wagons, :type
   attr_writer :route
@@ -18,42 +20,42 @@ class Train
     @number_of_wagons = number_of_wagons
     @speed = 0
     @route = nil
-    @current_station = nil
+    @current_station_index = nil
   end
 
   def accept_route(route)
     @route = route
-    @current_station = @route.start
+    @current_station_index = 0
   end
 
   def next_station
     raise 'Маршрут не задан' if @route.nil?
 
-    @route.stations[current_station_index + 1]
+    @route.stations[@current_station_index + 1]
   end
 
   def current_station
     raise 'Маршрут не задан' if @route.nil?
 
-    @current_station
+    @route.stations[@current_station_index]
   end
 
   def previous_station
     raise 'Маршрут не задан' if @route.nil?
 
-    @route.stations[current_station_index - 1]
+    @route.stations[@current_station_index - 1]
   end
 
   def forward
-    raise 'Движение вперед невозможно' if @current_station == @route.finish
+    raise 'Движение вперед невозможно' if @current_station_index == @route.stations.length - 1
 
-    @current_station = @route.stations[current_station_index + 1]
+    @current_station_index += 1
   end
 
   def backward
-    raise 'Движение назад невозможно' if @current_station == @route.finish
+    raise 'Движение назад невозможно' if @current_station_index.zero?
 
-    @current_station = @route.stations[current_station_index - 1]
+    @current_station_index -= 1
   end
 
   def accelerate(speed)
@@ -78,11 +80,5 @@ class Train
     else
       @number_of_wagons -= 1
     end
-  end
-
-  private
-
-  def current_station_index
-    @route.stations.index(@current_station)
   end
 end
