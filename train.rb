@@ -9,7 +9,8 @@
 # station per step.
 # Shows previous, current and next stations on the route.
 class Train
-  attr_reader :speed, :number_of_wagons, :current_station, :type
+  attr_reader :speed, :number_of_wagons, :type
+  attr_writer :route
 
   def initialize(serial_number, type, number_of_wagons)
     @serial_number = serial_number
@@ -26,10 +27,20 @@ class Train
   end
 
   def next_station
+    raise 'Маршрут не задан' if @route.nil?
+
     @route.stations[current_station_index + 1]
   end
 
+  def current_station
+    raise 'Маршрут не задан' if @route.nil?
+
+    @current_station
+  end
+
   def previous_station
+    raise 'Маршрут не задан' if @route.nil?
+
     @route.stations[current_station_index - 1]
   end
 

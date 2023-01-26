@@ -21,6 +21,6 @@ class Route
   end
 
   def stations_list
-    @stations.collect { |station| station.name }
+    @stations.collect(&:name)
   end
 end

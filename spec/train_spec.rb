@@ -20,6 +20,12 @@ describe Train do
       expect(@train.current_station).to eq('Химки')
     end
 
+    it 'raises error if rount not accepted' do
+      @train.route = nil
+
+      expect { @train.current_station }.to raise_error(RuntimeError, 'Маршрут не задан')
+    end
+
     it 'returns next station' do
       @train.forward
 
