@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
 require './lib/station'
-require './lib/train'
+require './lib/cargo_train'
+require './lib/passenger_train'
 
 describe Station do
   before(:each) do
-    @first_train = Train.new('001', 'freight', 2)
-    @second_train = Train.new('002', 'passanger', 14)
-    @third_train = Train.new('003', 'passanger', 10)
-    @fourth_train = Train.new('004', 'passanger', 20)
-    @fifth_train = Train.new('005', 'freight', 25)
+    @first_train = PassengerTrain.new('PT-001')
+    @second_train = PassengerTrain.new('PT-002')
+    @third_train = CargoTrain.new('CT-003')
+    @fourth_train = CargoTrain.new('CT-004')
 
     @station = Station.new('Москва Товарная')
 
@@ -17,25 +17,24 @@ describe Station do
     @station.take(@second_train)
     @station.take(@third_train)
     @station.take(@fourth_train)
-    @station.take(@fifth_train)
   end
 
   it 'takes the train' do
-    train = Train.new('006', 'freight', 2)
+    train = CargoTrain.new('CT-005')
     @station.take(train)
 
-    expect(@station.trains.length).to eq(6)
+    expect(@station.trains.length).to eq(5)
   end
 
   it 'send the train' do
-    @station.send(@fifth_train)
+    @station.send(@fourth_train)
 
-    expect(@station.trains.length).to eq(4)
+    expect(@station.trains.length).to eq(3)
   end
 
   it 'filters trains by type' do
-    passanger_trains = @station.filter_by_type('passanger')
+    passenger_trains = @station.filter_by_type('passenger')
 
-    expect(passanger_trains.length).to eq(3)
+    expect(passenger_trains.length).to eq(2)
   end
 end

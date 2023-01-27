@@ -2,13 +2,16 @@
 
 require './lib/train'
 require './lib/route'
+require './lib/cargo_wagon'
 
 describe Train do
   before(:each) do
-    @train = Train.new('001', 'freight', 2)
+    @train = Train.new('001')
     route = Route.new('Москва', 'Петушки')
     route.add('Кусково')
     route.add('Ольгино')
+    @wagon = CargoWagon.new
+
     @train.accept_route(route)
   end
 
@@ -20,7 +23,7 @@ describe Train do
       expect(@train.current_station).to eq('Химки')
     end
 
-    it 'raises error if rount not accepted' do
+    it 'raises error if route not accepted' do
       @train.route = nil
 
       expect { @train.current_station }.to raise_error(RuntimeError, 'Маршрут не задан')
@@ -79,36 +82,23 @@ describe Train do
   end
 
   context 'add wagon' do
-    it 'adds wagon' do
-      @train.add_wagon
-
-      expect(@train.number_of_wagons).to eq(3)
-    end
-
     it 'raises moving error' do
       @train.accelerate(50)
 
-      expect { @train.add_wagon }.to raise_error(RuntimeError, 'Поезд в движении. Операция невозможна')
+      expect { @train.send(:add_wagon, @wagon) }.to raise_error(RuntimeError, 'Поезд в движении. Операция невозможна')
     end
   end
 
   context 'remove wagon' do
     it 'raises moving error' do
+      @train.send(:add_wagon, @wagon)
       @train.accelerate(50)
 
-      expect { @train.remove_wagon }.to raise_error(RuntimeError, 'Поезд в движении. Операция невозможна')
+      expect { @train.send(:remove_wagon, @wagon) }.to raise_error(RuntimeError, 'Поезд в движении. Операция невозможна')
     end
 
     it 'raises empty train error' do
-      2.times { @train.remove_wagon }
-
-      expect { @train.remove_wagon }.to raise_error(RuntimeError, 'Вагоны отсутствуют. Операция невозможна')
-    end
-
-    it 'removes wagon' do
-      @train.remove_wagon
-
-      expect(@train.number_of_wagons).to eq(1)
+      expect { @train.send(:remove_wagon, @wagon) }.to raise_error(RuntimeError, 'Вагоны отсутствуют. Операция невозможна')
     end
   end
 end
