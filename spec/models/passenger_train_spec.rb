@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require './lib/train'
-require './lib/passenger_train'
-require './lib/cargo_wagon'
-require './lib/passenger_wagon'
+require './lib/models/train'
+require './lib/models/passenger_train'
+require './lib/models/cargo_wagon'
+require './lib/models/passenger_wagon'
 
 describe PassengerTrain do
   before(:each) do
