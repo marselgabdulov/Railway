@@ -23,6 +23,12 @@ class CommandInterface
   def new_station
     puts 'Введите название станции'
     name = gets.chomp
+    station = create_station(name)
+    if station.nil?
+      puts "Станция #{name} уже существует"
+    else
+      puts "Станция #{name} создана"
+    end
   end
 
   def instruction
