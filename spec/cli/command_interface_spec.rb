@@ -21,6 +21,7 @@ describe CommandInterface do
     @commands.trains << @train_one
     @commands.trains << @train_two
     @route = Route.new(@station_one, @station_two)
+    @commands.routes << @route
   end
 
   context 'create station' do

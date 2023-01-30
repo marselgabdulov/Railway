@@ -16,8 +16,7 @@ class CommandInterface
     @stations = []
     @trains = []
     @wagons = []
-    @routes = []
-    @current_route = nil
+    @route = nil
   end
 
   def new_station
@@ -41,6 +40,26 @@ class CommandInterface
       puts "Поезд #{serial_number} уже существует"
     else
       puts "Поезд #{serial_number} создан"
+    end
+  end
+
+  def new_route
+    puts 'Введите начало и конец маршрута. Например, Москва Владивосток.'
+    input = gets.chomp.split
+    start = input[0]
+    finish = input[1]
+    start_station = create_station(start)
+    finish_station = create_station(finish)
+    route = Route.new(start_station, finish_station)
+    @route = route
+    puts "Маршрут '#{start} - #{finish}' построен"
+  end
+
+  def show_route
+    if @route.nil?
+      puts 'Маршрут не создан'
+    else
+      puts "Маршрут #{@route.stations.collect(&:name)}"
     end
   end
 

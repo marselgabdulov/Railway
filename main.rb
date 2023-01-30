@@ -22,6 +22,10 @@ while (line = $stdin.gets.rstrip)
     commands.new_station
   when 'новый поезд'
     commands.new_train
+  when 'новый маршрут'
+    commands.new_route
+  when 'показать маршрут'
+    commands.show_route
   when 'помощь'
     commands.instruction
   when 'выход'
