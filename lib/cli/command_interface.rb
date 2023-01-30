@@ -85,7 +85,14 @@ class CommandInterface
     else
       puts 'Выберите поезд из списка и введите серийный номер:'
       show_trains
-      @current_train = find_object(@trains, 'serial_number', serial_number)
+      serial_number = gets.chomp
+      train = find_object(@trains, 'serial_number', serial_number)
+      if train.nil?
+        puts "Поезда с серийным номером #{serial_number} не существует"
+      else
+        @current_train = train
+        puts "Поезд с серийным номером #{serial_number} готов к манипуляциям"
+      end
     end
   end
 

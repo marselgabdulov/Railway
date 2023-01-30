@@ -26,6 +26,8 @@ while (line = $stdin.gets.rstrip)
     commands.choose_station
   when 'новый поезд'
     commands.new_train
+  when 'выбрать поезд'
+    commands.choose_train
   when 'новый маршрут'
     commands.new_route
   when 'выбрать маршрут'
