@@ -1,4 +1,4 @@
-![Testing Workflow](https://github.com/marselgabdulov/Railway/actions/workflows/main.yml/badge.svg)
+![RSpec](https://github.com/marselgabdulov/Railway/actions/workflows/main.yml/badge.svg)
 
 # Железная дорога
 
