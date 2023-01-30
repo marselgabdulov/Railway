@@ -21,7 +21,7 @@ class CommandInterface
   end
 
   def new_station
-    puts 'Введите название станции'
+    puts 'Введите название станции.'
     name = gets.chomp
     station = create_station(name)
     if station.nil?
@@ -29,6 +29,14 @@ class CommandInterface
     else
       puts "Станция #{name} создана"
     end
+  end
+
+  def new_train
+    puts 'Введите категорию поезда (грузовой или пассажирский) и серийный номер. Например, грузовой 001.'
+    input = gets.chomp.split
+    type = input[0]
+    serial_number = input[1]
+
   end
 
   def instruction
@@ -66,6 +74,17 @@ class CommandInterface
     station = Station.new(name)
     @stations << station
     station
+  end
+
+  def create_train(type, serial_number)
+    return unless find_object(@trains, 'serial_number', serial_number).nil?
+    train = if type == 'грузовой'
+              CargoTrain.new(serial_number)
+            else
+              PassengerTrain.new(serial_number)
+            end
+    @trains << train
+    train
   end
 
   def find_object(where, attribute, value)
