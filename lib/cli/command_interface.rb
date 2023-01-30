@@ -36,7 +36,12 @@ class CommandInterface
     input = gets.chomp.split
     type = input[0]
     serial_number = input[1]
-
+    train = create_train(type, serial_number)
+    if train.nil?
+      puts "Поезд #{serial_number} уже существует"
+    else
+      puts "Поезд #{serial_number} создан"
+    end
   end
 
   def instruction
