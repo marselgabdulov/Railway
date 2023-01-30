@@ -67,8 +67,6 @@ class CommandInterface
   def choose_train
     if @trains.empty?
       puts 'Еще не создано ни одного поезда'
-    elsif @stations.empty?
-      puts 'Еще не создано ни одной станции'
     else
       puts 'Выберите поезд из списка и введите серийный номер:'
       show_trains
@@ -162,7 +160,16 @@ class CommandInterface
   end
 
   def route_to_train
-
+    if @current_route.nil? && @current_train.nil?
+      puts 'Не созданы ни маршрут, ни поезд'
+    elsif @current_route.nil?
+      puts 'Не создан маршрут'
+    elsif @current_train.nil?
+      puts 'Не создан поезд'
+    else
+      @current_train.accept_route(@current_route)
+      puts "Поезду #{@current_train.serial_number} назначен маршрут #{@current_route.stations_list}"
+    end
   end
 
 
