@@ -100,10 +100,10 @@ class CommandInterface
   end
 
   def new_route
-    puts 'Введите начало и конец маршрута. Например, Москва Владивосток'
-    input = gets.chomp.split
-    start = input[0]
-    finish = input[1]
+    puts 'Введите начало машрута'
+    start = gets.chomp
+    puts 'Введите конец машрута'
+    finish = gets.chomp
     start_station = create_station(start)
     finish_station = create_station(finish)
     route = Route.new(start_station, finish_station)
