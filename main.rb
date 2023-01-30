@@ -20,6 +20,10 @@ while (line = $stdin.gets.rstrip)
   case line
   when 'новая станция'
     commands.new_station
+  when 'текущая станция'
+    commands.show_current_station
+  when 'выбрать станцию'
+    commands.choose_station
   when 'новый поезд'
     commands.new_train
   when 'новый маршрут'
@@ -34,6 +38,10 @@ while (line = $stdin.gets.rstrip)
     commands.remove_from_route
   when 'маршрут поезду'
     commands.route_to_train
+  when 'поезд вперед'
+    commands.train_forward
+  when 'поезд назад'
+    commands.train_backward
   when 'список поездов'
     commands.show_trains
   when 'список станций'

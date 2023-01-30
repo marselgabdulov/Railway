@@ -2,8 +2,8 @@
 
 # Train
 class Train
-  attr_reader :speed, :type, :wagons, :serial_number
-  attr_writer :route
+  attr_reader :speed, :type, :wagons, :serial_number, :current_station_index
+  attr_accessor :route
 
   def initialize(serial_number)
     @serial_number = serial_number

@@ -47,20 +47,34 @@ class CommandInterface
     else
       puts 'Выберите станцию из списка и введите название:'
       show_stations
-      @current_train = find_object(@trains, 'serial_number', serial_number)
+      name = gets.chomp
+      @current_station = find_object(@stations, 'name', name)
+      puts "Текущая станция - #{@current_station.name}"
+    end
+  end
+
+  def show_current_station
+    if @stations.empty?
+      puts 'Еще не создано ни одной станции'
+    else
+      puts "Текущая станция #{@current_station.name}"
     end
   end
 
   def new_train
-    puts 'Введите категорию поезда (грузовой или пассажирский) и серийный номер. Например, грузовой 001'
-    input = gets.chomp.split
-    type = input[0]
-    serial_number = input[1]
-    train = create_train(type, serial_number)
-    if train.nil?
-      puts "Поезд #{serial_number} уже существует"
+    if @current_station.nil?
+      puts 'Нельзя создать поезд. Сперва создайте станцию'
     else
-      puts "Поезд #{serial_number} создан"
+      puts 'Введите категорию поезда (грузовой или пассажирский) и серийный номер. Например, грузовой 001'
+      input = gets.chomp.split
+      type = input[0]
+      serial_number = input[1]
+      train = create_train(type, serial_number)
+      if train.nil?
+        puts "Поезд #{serial_number} уже существует"
+      else
+        puts "Поезд #{serial_number} создан"
+      end
     end
   end
 
@@ -80,8 +94,7 @@ class CommandInterface
     elsif @current_station.trains.empty?
       puts "Поездов на станции '#{@current_station.name}' нет"
     else
-      p "Грузовые: #{@current_station.trains.collect { |t| t.type == 'cargo' }}"
-      p "Пассажиркие: #{@current_station.trains.collect { |t| t.type == 'passenger' }}"
+      trains_lists
     end
   end
 
@@ -172,6 +185,48 @@ class CommandInterface
     end
   end
 
+  def train_forward
+    if @current_route.nil? && @current_train.nil?
+      puts 'Не созданы ни маршрут, ни поезд'
+    elsif @current_route.nil?
+      puts 'Не создан маршрут'
+    elsif @current_train.nil?
+      puts 'Не создан поезд'
+    elsif @current_train.route.nil?
+      puts "Поезду #{@current_train.serial_number} не назначен маршрут"
+    else
+      begin
+        @current_train.previous_station.send(@current_train)
+        @current_train.forward
+      rescue RuntimeError => e
+        puts e.message
+      ensure
+        puts "Поезд номер #{@current_train.serial_number} находится на станции #{@current_route.stations[@current_train.current_station_index].name}"
+      end
+    end
+  end
+
+  def train_backward
+    if @current_route.nil? && @current_train.nil?
+      puts 'Не созданы ни маршрут, ни поезд'
+    elsif @current_route.nil?
+      puts 'Не создан маршрут'
+    elsif @current_train.nil?
+      puts 'Не создан поезд'
+    elsif @current_train.route.nil?
+      puts "Поезду #{@current_train.serial_number} не назначен маршрут"
+    else
+      begin
+        @current_train.next_station.send(@current_train)
+        @current_train.backward
+      rescue RuntimeError => e
+        puts e.message
+      ensure
+        puts "Поезд номер #{@current_train.serial_number} находится на станции #{@current_route.stations[@current_train.current_station_index].name}"
+      end
+    end
+  end
+
 
   def instruction
     puts "Программа имитирует работу железной дороги. Можно создавать ж/д станции, маршруты, поезда и вагоны (грузовые и пассажирские), выбирать поезд для последующих манипуляций, назначать маршруты поездам, прицеплять и отцеплять вагоны, перемещать поезда вперед и назад по маршруту, выводить список поездов на станции и список станций на маршруте следования.
@@ -202,6 +257,11 @@ class CommandInterface
 
   private
 
+  def trains_lists
+    p "Грузовые: #{@current_station.trains.filter { |t| t.type == 'cargo' }.collect(&:serial_number)}"
+    p "Пассажирские: #{@current_station.trains.filter { |t| t.type == 'passenger' }.collect(&:serial_number)}"
+  end
+
   def create_station(name)
     return unless find_object(@stations, 'name', name).nil?
 
@@ -221,6 +281,7 @@ class CommandInterface
             end
     @trains << train
     @current_train = train
+    @current_station.take(train)
     train
   end
 

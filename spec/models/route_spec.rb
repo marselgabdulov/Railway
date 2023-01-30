@@ -13,7 +13,7 @@ describe Route do
   end
 
   it 'shows stations' do
-    expect(@route.stations_list).to eq(%w[Москва Петушки])
+    expect(@route.stations_list).to eq('Москва-Петушки')
   end
 
   it 'adds new station' do
