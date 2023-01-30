@@ -20,11 +20,9 @@ class CommandInterface
     @current_route = nil
   end
 
-
   def new_station
     puts 'Введите название станции'
     name = gets.chomp
-
   end
 
   def instruction
@@ -55,6 +53,14 @@ class CommandInterface
   end
 
   private
+
+  def create_station(name)
+    return unless find_object(@stations, 'name', name).nil?
+
+    station = Station.new(name)
+    @stations << station
+    station
+  end
 
   def find_object(where, attribute, value)
     where.select { |i| i.method(attribute).call == value }.first

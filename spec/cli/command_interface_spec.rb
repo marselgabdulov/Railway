@@ -22,6 +22,20 @@ describe CommandInterface do
     @route = Route.new(@station_one, @station_two)
   end
 
+  context 'create station' do
+    it 'creates new station' do
+      @commands.send(:create_station, 'Химки')
+
+      expect(@commands.stations.length).to be(3)
+    end
+
+    it 'does not create station with exsisting name' do
+      @commands.send(:create_station, 'Москва')
+
+      expect(@commands.stations.length).to be(2)
+    end
+  end
+
   context 'find_object' do
     it 'finds object' do
       expect(@commands.send(:find_object, @commands.stations, 'name', @station_one.name)).to be(@station_one)
