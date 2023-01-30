@@ -72,9 +72,25 @@ class CommandInterface
       if find_object(@route.stations, 'name', name).nil?
         station = create_station(name)
         @route.add(station)
-        puts "Станция #{name} добавлена в маршрут"
+        puts "Станция '#{name}' добавлена в маршрут"
       else
-        puts "Станция #{name} уже присутствует в маршруте"
+        puts "Станция '#{name}' уже присутствует в маршруте"
+      end
+      puts "Маршрут #{@route.stations.collect(&:name)}"
+    end
+  end
+
+  def remove_from_route
+    if @route.nil?
+      puts 'Маршрут не создан'
+    else
+      puts 'Введите название станции'
+      name = gets.chomp
+      if find_object(@route.stations, 'name', name).nil?
+        puts "Станции #{name} нет в маршруте"
+      else
+        @route.remove(find_object(@stations, 'name', name))
+        puts "Станция #{name} удалена из маршрута"
       end
       puts "Маршрут #{@route.stations.collect(&:name)}"
     end

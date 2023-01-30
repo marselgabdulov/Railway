@@ -28,6 +28,8 @@ while (line = $stdin.gets.rstrip)
     commands.show_route
   when 'добавить в маршрут'
     commands.add_to_route
+  when 'удалить из маршрута'
+    commands.remove_from_route
   when 'помощь'
     commands.instruction
   when 'выход'
