@@ -94,11 +94,15 @@ describe Train do
       @train.send(:add_wagon, @wagon)
       @train.accelerate(50)
 
-      expect { @train.send(:remove_wagon, @wagon) }.to raise_error(RuntimeError, 'Поезд в движении. Операция невозможна')
+      expect do
+        @train.send(:remove_wagon, @wagon)
+      end.to raise_error(RuntimeError, 'Поезд в движении. Операция невозможна')
     end
 
     it 'raises empty train error' do
-      expect { @train.send(:remove_wagon, @wagon) }.to raise_error(RuntimeError, 'Вагоны отсутствуют. Операция невозможна')
+      expect do
+        @train.send(:remove_wagon, @wagon)
+      end.to raise_error(RuntimeError, 'Вагоны отсутствуют. Операция невозможна')
     end
   end
 end

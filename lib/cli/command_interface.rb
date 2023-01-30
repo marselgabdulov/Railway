@@ -234,7 +234,7 @@ class CommandInterface
     if type == 'грузовой'
       @cargo_wagons << CargoWagon.new
     else
-      @passenger_wagons <<  PassengerWagon.new
+      @passenger_wagons << PassengerWagon.new
     end
     puts 'Вагон создан'
   end
@@ -251,11 +251,9 @@ class CommandInterface
   def add_wagon
     if @current_train.nil?
       puts 'Поезд не создан. Не к чему цеплять'
-    elsif
-      @current_train.type == 'cargo' && @cargo_wagons.empty? || @current_train.type == 'passenger' && @passenger_wagons.empty?
+    elsif @current_train.type == 'cargo' && @cargo_wagons.empty? || @current_train.type == 'passenger' && @passenger_wagons.empty?
       puts 'Вагонов нужного типа нет'
-    elsif
-      @current_train.type == 'cargo'
+    elsif @current_train.type == 'cargo'
       @current_train.add_wagon(@cargo_wagons.pop)
       puts 'Вагон прицеплен'
     else
@@ -268,8 +266,7 @@ class CommandInterface
   def remove_wagon
     if @current_train.nil?
       puts 'Поезд не создан. Не от чего отцеплять'
-    elsif
-      @current_train.type == 'cargo'
+    elsif @current_train.type == 'cargo'
       last_wagon(@cargo_wagons)
     else
       last_wagon(@passenger_wagons)
@@ -304,6 +301,7 @@ class CommandInterface
     Kernel.exit
   end
 
+  # Методы ниже служебные, поэтому я их закрыл для внешнего доступа
   private
 
   def trains_lists
