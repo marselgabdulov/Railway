@@ -24,12 +24,22 @@ while (line = $stdin.gets.rstrip)
     commands.new_train
   when 'новый маршрут'
     commands.new_route
+  when 'выбрать маршрут'
+    commands.choose_route
   when 'показать маршрут'
     commands.show_route
   when 'добавить в маршрут'
     commands.add_to_route
   when 'удалить из маршрута'
     commands.remove_from_route
+  when 'маршрут поезду'
+    commands.route_to_train
+  when 'список поездов'
+    commands.show_trains
+  when 'список станций'
+    commands.show_stations
+  when 'список маршрутов'
+    commands.show_routes
   when 'помощь'
     commands.instruction
   when 'выход'

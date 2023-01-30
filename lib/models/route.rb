@@ -21,6 +21,6 @@ class Route
   end
 
   def stations_list
-    @stations.collect(&:name)
+    @stations.map(&:name).join('-')
   end
 end
