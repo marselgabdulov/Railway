@@ -56,8 +56,6 @@ class Train
     @speed = 0
   end
 
-  protected
-
   def add_wagon(wagon)
     raise 'Поезд в движении. Операция невозможна' if @speed.nonzero?
 

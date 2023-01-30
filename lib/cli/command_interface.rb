@@ -15,7 +15,8 @@ class CommandInterface
   def initialize
     @stations = []
     @trains = []
-    @wagons = []
+    @cargo_wagons = []
+    @passenger_wagons = []
     @routes = []
     @current_route = nil
     @current_station = nil
@@ -227,6 +228,54 @@ class CommandInterface
     end
   end
 
+  def new_wagon
+    puts 'Введите тип вагона (грузовой или пассажирский)'
+    type = gets.chomp
+    if type == 'грузовой'
+      @cargo_wagons << CargoWagon.new
+    else
+      @passenger_wagons <<  PassengerWagon.new
+    end
+    puts 'Вагон создан'
+  end
+
+  def show_wagons
+    if @cargo_wagons.empty? && @passenger_wagons.empty?
+      puts 'Вагонов еще нет'
+    else
+      p "Грузовых: #{@cargo_wagons.length}"
+      p "Пассажирских: #{@passenger_wagons.length}"
+    end
+  end
+
+  def add_wagon
+    if @current_train.nil?
+      puts 'Поезд не создан. Не к чему цеплять'
+    elsif
+      @current_train.type == 'cargo' && @cargo_wagons.empty? || @current_train.type == 'passenger' && @passenger_wagons.empty?
+      puts 'Вагонов нужного типа нет'
+    elsif
+      @current_train.type == 'cargo'
+      @current_train.add_wagon(@cargo_wagons.pop)
+      puts 'Вагон прицеплен'
+    else
+      @current_train.add_wagon(@passenger_wagons.pop)
+      puts 'Вагон прицеплен'
+    end
+    show_wagons
+  end
+
+  def remove_wagon
+    if @current_train.nil?
+      puts 'Поезд не создан. Не от чего отцеплять'
+    elsif
+      @current_train.type == 'cargo'
+      last_wagon(@cargo_wagons)
+    else
+      last_wagon(@passenger_wagons)
+    end
+    show_wagons
+  end
 
   def instruction
     puts "Программа имитирует работу железной дороги. Можно создавать ж/д станции, маршруты, поезда и вагоны (грузовые и пассажирские), выбирать поезд для последующих манипуляций, назначать маршруты поездам, прицеплять и отцеплять вагоны, перемещать поезда вперед и назад по маршруту, выводить список поездов на станции и список станций на маршруте следования.
@@ -260,6 +309,20 @@ class CommandInterface
   def trains_lists
     p "Грузовые: #{@current_station.trains.filter { |t| t.type == 'cargo' }.collect(&:serial_number)}"
     p "Пассажирские: #{@current_station.trains.filter { |t| t.type == 'passenger' }.collect(&:serial_number)}"
+  end
+
+  def last_wagon(wagons_depo)
+    if @current_train.wagons.empty?
+      puts 'Вагонов нет'
+    else
+      wagon = @current_train.wagons.last
+      begin
+        @current_train.remove_wagon(wagon)
+        wagons_depo << wagon
+      rescue RuntimeError => e
+        puts e.message
+      end
+    end
   end
 
   def create_station(name)
