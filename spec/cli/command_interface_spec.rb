@@ -16,6 +16,7 @@ describe CommandInterface do
     @station_two = Station.new('Тверь')
     @commands.stations << @station_one
     @commands.stations << @station_two
+    @commands.current_station = @station_one
     @train_one = PassengerTrain.new('001')
     @train_two = CargoTrain.new('002')
     @commands.trains << @train_one

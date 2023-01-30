@@ -9,8 +9,8 @@ require_relative '../models/passenger_wagon'
 
 # CommandInterface
 class CommandInterface
-  attr_accessor :stations, :trains, :wagons, :routes, :current_train_serial_number, :current_wagon_serial_number,
-                :current_route
+  attr_reader :stations, :trains, :cargo_wagons, :passenger_wagons, :routes, :current_route, :current_train
+  attr_accessor :current_station
 
   def initialize
     @stations = []
