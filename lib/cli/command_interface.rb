@@ -63,6 +63,23 @@ class CommandInterface
     end
   end
 
+  def add_to_route
+    if @route.nil?
+      puts 'Маршрут не создан'
+    else
+      puts 'Введите название станции'
+      name = gets.chomp
+      if find_object(@route.stations, 'name', name).nil?
+        station = create_station(name)
+        @route.add(station)
+        puts "Станция #{name} добавлена в маршрут"
+      else
+        puts "Станция #{name} уже присутствует в маршруте"
+      end
+      puts "Маршрут #{@route.stations.collect(&:name)}"
+    end
+  end
+
   def instruction
     puts "Программа имитирует работу железной дороги. Можно создавать ж/д станции, маршруты, поезда и вагоны (грузовые и пассажирские), выбирать поезд для последующих манипуляций, назначать маршруты поездам, прицеплять и отцеплять вагоны, перемещать поезда вперед и назад по маршруту, выводить список поездов на станции и список станций на маршруте следования.
 
