@@ -22,7 +22,18 @@ describe CargoTrain do
     it 'rases wrong type of wagon' do
       expect do
         @cargo_train.add_wagon(@passenger_wagon)
-      end.to raise_error(RuntimeError, 'Нельзя добить пассажирский вагон')
+      end.to raise_error(RuntimeError, 'Нельзя добавить вагон другого типа')
+    end
+  end
+
+  context 'remove wagon' do
+    it 'raises error on moving' do
+      @cargo_train.send(:add_wagon, @cargo_wagon)
+      @cargo_train.accelerate(50)
+
+      expect do
+        @cargo_train.send(:remove_wagon, @cargo_wagon)
+      end.to raise_error(RuntimeError, 'Поезд в движении. Операция невозможна')
     end
   end
 end

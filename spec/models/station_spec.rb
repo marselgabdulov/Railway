@@ -33,7 +33,7 @@ describe Station do
   end
 
   it 'filters trains by type' do
-    passenger_trains = @station.filter_by_type('passenger')
+    passenger_trains = @station.filter_by_type('пассажирский')
 
     expect(passenger_trains.length).to eq(2)
   end

@@ -11,6 +11,7 @@ class Train
     @route = nil
     @wagons = []
     @current_station_index = nil
+    @type = nil
   end
 
   def accept_route(route)
@@ -58,6 +59,7 @@ class Train
 
   def add_wagon(wagon)
     raise 'Поезд в движении. Операция невозможна' if @speed.nonzero?
+    raise 'Нельзя добавить вагон другого типа' if wagon.type != @type
 
     @wagons << wagon
   end

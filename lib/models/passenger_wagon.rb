@@ -5,6 +5,6 @@ class PassengerWagon
   attr_reader :type
 
   def initialize
-    @type = 'passenger'
+    @type = 'пассажирский'
   end
 end
