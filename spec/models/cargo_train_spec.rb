@@ -32,7 +32,7 @@ describe CargoTrain do
       @cargo_train.accelerate(50)
 
       expect do
-        @cargo_train.send(:remove_wagon, @cargo_wagon)
+        @cargo_train.send(:remove_wagon)
       end.to raise_error(RuntimeError, 'Поезд в движении. Операция невозможна')
     end
   end

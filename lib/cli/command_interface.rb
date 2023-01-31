@@ -9,20 +9,13 @@ require_relative '../models/passenger_wagon'
 
 # CommandInterface
 class CommandInterface
-  attr_reader :stations, :trains, :cargo_wagons, :passenger_wagons, :routes, :current_route, :current_train
-  attr_accessor :current_station
+  attr_reader :stations, :trains, :routes
 
   def initialize
     # Эти переменные нужны для хранения состояния.
     @stations = []
     @trains = []
     @routes = []
-
-    @cargo_wagons = []
-    @passenger_wagons = []
-    @current_route = nil
-    @current_station = nil
-    @current_train = nil
   end
 
   def new_station
@@ -33,7 +26,7 @@ class CommandInterface
       puts "Станция '#{name}' уже существует"
     else
       puts "Станция '#{name}' создана"
-      @current_station = station
+      @stations << station
     end
   end
 
@@ -45,68 +38,30 @@ class CommandInterface
     end
   end
 
-  def choose_station
-    if @stations.empty?
-      puts 'Еще не создано ни одной станции'
-    else
-      puts 'Выберите станцию из списка и введите название:'
-      show_stations
-      name = gets.chomp
-      @current_station = find_object(@stations, 'name', name)
-      puts "Текущая станция - #{@current_station.name}"
-    end
-  end
-
   def show_current_station
     if @stations.empty?
       puts 'Еще не создано ни одной станции'
     else
-      puts "Текущая станция '#{@current_station.name}'"
+      puts "Текущая станция '#{@stations.last.name}'"
     end
   end
 
   def new_train
-    if @current_station.nil?
-      puts 'Нельзя создать поезд. Сперва выберите или создайте станцию'
-    else
-      puts 'Введите категорию поезда (грузовой или пассажирский) и серийный номер. Например, грузовой 001'
-      input = gets.chomp.split
-      type = input[0]
-      serial_number = input[1]
-      train = create_train(type, serial_number)
-      if train.nil?
-        puts "Поезд #{serial_number} уже существует"
-      else
-        puts "#{train.type.capitalize} поезд #{serial_number} создан"
-      end
-    end
-  end
-
-  def choose_train
-    if @trains.empty?
-      puts 'Еще не создано ни одного поезда'
-    else
-      puts 'Выберите поезд из списка и введите серийный номер:'
-      show_trains
-      serial_number = gets.chomp
-      train = find_object(@trains, 'serial_number', serial_number)
-      if train.nil?
-        puts "Поезда с серийным номером #{serial_number} не существует"
-      else
-        @current_train = train
-        puts "Поезд с серийным номером #{serial_number} готов к манипуляциям"
-      end
-    end
+    puts 'Введите тип поезда (грузовой или пассажирский) и сериный номер. Например, грузовой 001'
+    input = gets.chomp.split
+    type = input[0]
+    serial_number = input[1]
+    train = if type == 'грузовой'
+              CargoTrain.new(serial_number)
+            else
+              PassengerTrain.new(serial_number)
+            end
+    @trains << train
+    puts "Поезд #{serial_number} создан"
   end
 
   def show_trains
-    if @current_station.nil?
-      puts 'Еще не создано ни одной станции'
-    elsif @current_station.trains.empty?
-      puts "Поездов на станции '#{@current_station.name}' нет"
-    else
-      trains_lists
-    end
+    p (@trains.collect { |t| "#{t.type} #{t.serial_number}" })
   end
 
   def new_route
@@ -118,174 +73,131 @@ class CommandInterface
     finish_station = create_station(finish)
     route = Route.new(start_station, finish_station)
     @routes << route
-    @current_route = route
     puts "Маршрут '#{start} - #{finish}' построен"
   end
 
   def show_route
-    if @current_route.nil?
+    if @routes.empty?
       puts 'Маршрут не создан'
     else
-      puts "Маршрут #{@current_route.stations.collect(&:name)}"
-    end
-  end
-
-  def show_routes
-    if @routes.empty?
-      puts 'Не создано ни одного маршрута'
-    else
-      p numbered_routes
-    end
-  end
-
-  def choose_route
-    if @routes.empty?
-      puts 'Не создано ни одного маршрута'
-    else
-      p numbered_routes
-      puts 'Введите номер маршрута'
-      num = gets.chomp.to_i
-      @current_route = @routes[num - 1]
-      puts "Выбран маршрут #{@current_route.stations_list}"
+      puts "Маршрут #{@routes.last.stations_list}"
     end
   end
 
   def add_to_route
-    if @current_route.nil?
+    if @routes.empty?
       puts 'Маршрут не создан'
     else
       puts 'Введите название станции'
       name = gets.chomp
-      if find_object(@current_route.stations, 'name', name).nil?
+      if find_object(@routes.last.stations, 'name', name).nil?
         station = create_station(name)
-        @current_route.add(station)
+        @routes.last.add(station)
         puts "Станция '#{name}' добавлена в маршрут"
       else
         puts "Станция '#{name}' уже присутствует в маршруте"
       end
-      puts "Маршрут #{@current_route.stations.collect(&:name)}"
+      puts "Маршрут #{@routes.last.stations_list}"
     end
   end
 
   def remove_from_route
-    if @current_route.nil?
+    if @routes.empty?
       puts 'Маршрут не создан'
     else
       puts 'Введите название станции'
       name = gets.chomp
-      if find_object(@current_route.stations, 'name', name).nil?
+      if find_object(@routes.last.stations, 'name', name).nil?
         puts "Станции #{name} нет в маршруте"
       else
-        @current_route.remove(find_object(@stations, 'name', name))
+        @routes.last.remove(find_object(@stations, 'name', name))
         puts "Станция #{name} удалена из маршрута"
       end
-      puts "Маршрут #{@current_route.stations.collect(&:name)}"
+      puts "Маршрут #{@routes.last.stations_list}"
     end
   end
 
   def route_to_train
-    if @current_route.nil? && @current_train.nil?
+    if @routes.empty? && @trains.empty?
       puts 'Не созданы ни маршрут, ни поезд'
-    elsif @current_route.nil?
+    elsif @routes.empty?
       puts 'Не создан маршрут'
-    elsif @current_train.nil?
+    elsif @trains.empty?
       puts 'Не создан поезд'
     else
-      @current_train.accept_route(@current_route)
-      puts "Поезду #{@current_train.serial_number} назначен маршрут #{@current_route.stations_list}"
+      @trains.last.accept_route(@routes.last)
+      puts "Поезду #{@trains.last.serial_number} назначен маршрут #{@routes.last.stations_list}"
     end
   end
 
   def train_forward
-    if @current_route.nil? && @current_train.nil?
+    if @routes.last.nil? && @trains.last.nil?
       puts 'Не созданы ни маршрут, ни поезд'
-    elsif @current_route.nil?
+    elsif @routes.last.nil?
       puts 'Не создан маршрут'
-    elsif @current_train.nil?
+    elsif @trains.last.nil?
       puts 'Не создан поезд'
-    elsif @current_train.route.nil?
-      puts "Поезду #{@current_train.serial_number} не назначен маршрут"
+    elsif @trains.last.route.nil?
+      puts "Поезду #{@trains.last.serial_number} не назначен маршрут"
     else
       begin
-        @current_train.previous_station.remove(@current_train)
-        @current_train.forward
-        @cargo_train.current_station.add(@current_train)
-        @current_station = @current_train.current_station
+        @trains.last.forward
+        @trains.last.previous_station.remove(@trains.last)
+        @trains.last.current_station.take(@trains.last)
       rescue RuntimeError => e
         puts e.message
       ensure
-        puts "Поезд номер #{@current_train.serial_number} находится на станции #{@current_route.stations[@current_train.current_station_index].name}"
+        puts "Поезд номер #{@trains.last.serial_number} находится на станции #{@routes.last.stations[@trains.last.current_station_index].name}"
       end
     end
   end
 
   def train_backward
-    if @current_route.nil? && @current_train.nil?
+    if @routes.last.nil? && @trains.last.nil?
       puts 'Не созданы ни маршрут, ни поезд'
-    elsif @current_route.nil?
+    elsif @routes.last.nil?
       puts 'Не создан маршрут'
-    elsif @current_train.nil?
+    elsif @trains.last.nil?
       puts 'Не создан поезд'
-    elsif @current_train.route.nil?
-      puts "Поезду #{@current_train.serial_number} не назначен маршрут"
+    elsif @trains.last.route.nil?
+      puts "Поезду #{@trains.last.serial_number} не назначен маршрут"
     else
       begin
-        @current_train.next_station.remove(@current_train)
-        @current_train.backward
-        @cargo_train.current_station.add(@current_train)
-        @current_station = @current_train.current_station
+        @trains.last.backward
+        @trains.last.next_station.remove(@trains.last)
+        @trains.last.current_station.take(@trains.last)
       rescue RuntimeError => e
         puts e.message
       ensure
-        puts "Поезд номер #{@current_train.serial_number} находится на станции #{@current_route.stations[@current_train.current_station_index].name}"
+        puts "Поезд номер #{@trains.last.serial_number} находится на станции #{@routes.last.stations[@trains.last.current_station_index].name}"
       end
     end
   end
 
-  def new_wagon
-    puts 'Введите тип вагона (грузовой или пассажирский)'
-    type = gets.chomp
-    if type == 'грузовой'
-      @cargo_wagons << CargoWagon.new
-    else
-      @passenger_wagons << PassengerWagon.new
-    end
-    puts 'Вагон создан'
-  end
-
-  def show_wagons
-    if @cargo_wagons.empty? && @passenger_wagons.empty?
-      puts 'Вагонов еще нет'
-    else
-      p "Грузовых: #{@cargo_wagons.length}"
-      p "Пассажирских: #{@passenger_wagons.length}"
-    end
-  end
-
   def add_wagon
-    if @current_train.nil?
-      puts 'Поезд не создан. Не к чему цеплять'
-    elsif @current_train.type == 'cargo' && @cargo_wagons.empty? || @current_train.type == 'passenger' && @passenger_wagons.empty?
-      puts 'Вагонов нужного типа нет'
-    elsif @current_train.type == 'грузовой'
-      @current_train.add_wagon(@cargo_wagons.pop)
-      puts 'Вагон прицеплен'
+    if @trains.empty?
+      puts 'Нельзя прицепить вагон к несуществующему поезду'
     else
-      @current_train.add_wagon(@passenger_wagons.pop)
-      puts 'Вагон прицеплен'
+      if @trains.last.type == 'грузовой'
+        @trains.last.add_wagon(CargoWagon.new)
+      else
+        @trains.last.add_wagon(PassengerWagon.new)
+      end
+      puts "Вагон прицеплен к поезду #{@trains.last.serial_number}"
     end
-    show_wagons
   end
 
   def remove_wagon
-    if @current_train.nil?
-      puts 'Поезд не создан. Не от чего отцеплять'
-    elsif @current_train.type == 'грузовой'
-      last_wagon(@cargo_wagons)
+    if @trains.empty?
+      puts 'Нельзя отцепить вагон от несуществующего поезда'
     else
-      last_wagon(@passenger_wagons)
+      begin
+        @trains.last.remove_wagon
+        puts 'Вагон отцеплен'
+      rescue RuntimeError => e
+        puts e.message
+      end
     end
-    show_wagons
   end
 
   def instruction
@@ -293,14 +205,11 @@ class CommandInterface
 
     Комманды:
     - 'новая станция' - создание новой станции
-    - 'выбрать станцию' - выбрать станцию для манипуляций
     - 'новый поезд' - создание нового поезда
-    - 'выбрать поезд' - выбрать поезд для манипуляций
     - 'новый маршрут' - создать маршрут
+    - 'добавить в маршрут' - добавить станцию маршрут
+    - 'удалить из маршрута' - удалить станцию из маршрута
     - 'показать маршрут'
-    - 'назначить маршрут' - пустить выбранный поезд по маршруту
-    - 'новый вагон' - создать вагон
-    - 'выбрать вагон' - выбрать вагон для манипуляций
     - 'прицепить вагон' - прицепить вагон к поезду
     - 'отцепить вагон'
     - 'поезд вперед' - переместить поезд на следующую странцию
@@ -319,23 +228,9 @@ class CommandInterface
   private
 
   def trains_lists
-    puts "На станции '#{@current_station.name}'"
-    p "Грузовые: #{@current_station.trains.filter { |t| t.type == 'грузовой' }.collect(&:serial_number)}"
-    p "Пассажирские: #{@current_station.trains.filter { |t| t.type == 'пассажирский' }.collect(&:serial_number)}"
-  end
-
-  def last_wagon(wagons_depo)
-    if @current_train.wagons.empty?
-      puts 'Вагонов нет'
-    else
-      wagon = @current_train.wagons.last
-      begin
-        @current_train.remove_wagon(wagon)
-        wagons_depo << wagon
-      rescue RuntimeError => e
-        puts e.message
-      end
-    end
+    puts "На станции '#{@stations.last.name}'"
+    p "Грузовые: #{@stations.last.trains.filter { |t| t.type == 'грузовой' }.collect(&:serial_number)}"
+    p "Пассажирские: #{@stations.last.trains.filter { |t| t.type == 'пассажирский' }.collect(&:serial_number)}"
   end
 
   def create_station(name)
@@ -355,8 +250,6 @@ class CommandInterface
               PassengerTrain.new(serial_number)
             end
     @trains << train
-    @current_train = train
-    @current_station.take(train)
     train
   end
 

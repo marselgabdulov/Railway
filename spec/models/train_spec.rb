@@ -92,8 +92,8 @@ describe Train do
   context 'remove wagon' do
     it 'raises empty train error' do
       expect do
-        @train.send(:remove_wagon, @wagon)
-      end.to raise_error(RuntimeError, 'Вагоны отсутствуют. Операция невозможна')
+        @train.send(:remove_wagon)
+      end.to raise_error(RuntimeError, 'У поезда отсутствуют вагоны. Операция невозможна')
     end
   end
 end

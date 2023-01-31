@@ -64,13 +64,13 @@ class Train
     @wagons << wagon
   end
 
-  def remove_wagon(wagon)
+  def remove_wagon
     if @speed.nonzero?
       raise 'Поезд в движении. Операция невозможна'
     elsif @wagons.empty?
-      raise 'Вагоны отсутствуют. Операция невозможна'
+      raise 'У поезда отсутствуют вагоны. Операция невозможна'
     else
-      @wagons.delete(wagon)
+      @wagons.pop
     end
   end
 end

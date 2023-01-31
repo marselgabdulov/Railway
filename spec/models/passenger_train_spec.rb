@@ -20,7 +20,9 @@ describe PassengerTrain do
     end
 
     it 'rases wrong type of wagon' do
-      expect { @passenger_train.add_wagon(@cargo_wagon) }.to raise_error(RuntimeError, 'Нельзя добавить вагон другого типа')
+      expect do
+        @passenger_train.add_wagon(@cargo_wagon)
+      end.to raise_error(RuntimeError, 'Нельзя добавить вагон другого типа')
     end
   end
 end
