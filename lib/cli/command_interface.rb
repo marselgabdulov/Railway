@@ -15,9 +15,11 @@ class CommandInterface
   def initialize
     @stations = []
     @trains = []
+    @routes = []
+
+    # Эти переменные нужны для хранения состояния.
     @cargo_wagons = []
     @passenger_wagons = []
-    @routes = []
     @current_route = nil
     @current_station = nil
     @current_train = nil
