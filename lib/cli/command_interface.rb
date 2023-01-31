@@ -13,11 +13,11 @@ class CommandInterface
   attr_accessor :current_station
 
   def initialize
+    # Эти переменные нужны для хранения состояния.
     @stations = []
     @trains = []
     @routes = []
 
-    # Эти переменные нужны для хранения состояния.
     @cargo_wagons = []
     @passenger_wagons = []
     @current_route = nil
@@ -30,9 +30,9 @@ class CommandInterface
     name = gets.chomp
     station = create_station(name)
     if station.nil?
-      puts "Станция #{name} уже существует"
+      puts "Станция '#{name}' уже существует"
     else
-      puts "Станция #{name} создана"
+      puts "Станция '#{name}' создана"
     end
   end
 
@@ -60,7 +60,7 @@ class CommandInterface
     if @stations.empty?
       puts 'Еще не создано ни одной станции'
     else
-      puts "Текущая станция #{@current_station.name}"
+      puts "Текущая станция '#{@current_station.name}'"
     end
   end
 
@@ -76,7 +76,7 @@ class CommandInterface
       if train.nil?
         puts "Поезд #{serial_number} уже существует"
       else
-        puts "Поезд #{serial_number} создан"
+        puts "#{train.type.capitalize} поезд #{serial_number} создан"
       end
     end
   end
@@ -262,7 +262,7 @@ class CommandInterface
       puts 'Поезд не создан. Не к чему цеплять'
     elsif @current_train.type == 'cargo' && @cargo_wagons.empty? || @current_train.type == 'passenger' && @passenger_wagons.empty?
       puts 'Вагонов нужного типа нет'
-    elsif @current_train.type == 'cargo'
+    elsif @current_train.type == 'грузовой'
       @current_train.add_wagon(@cargo_wagons.pop)
       puts 'Вагон прицеплен'
     else
@@ -275,7 +275,7 @@ class CommandInterface
   def remove_wagon
     if @current_train.nil?
       puts 'Поезд не создан. Не от чего отцеплять'
-    elsif @current_train.type == 'cargo'
+    elsif @current_train.type == 'грузовой'
       last_wagon(@cargo_wagons)
     else
       last_wagon(@passenger_wagons)
@@ -314,8 +314,8 @@ class CommandInterface
   private
 
   def trains_lists
-    p "Грузовые: #{@current_station.trains.filter { |t| t.type == 'cargo' }.collect(&:serial_number)}"
-    p "Пассажирские: #{@current_station.trains.filter { |t| t.type == 'passenger' }.collect(&:serial_number)}"
+    p "Грузовые: #{@current_station.trains.filter { |t| t.type == 'грузовой' }.collect(&:serial_number)}"
+    p "Пассажирские: #{@current_station.trains.filter { |t| t.type == 'пассажирский' }.collect(&:serial_number)}"
   end
 
   def last_wagon(wagons_depo)
