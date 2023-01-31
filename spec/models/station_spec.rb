@@ -27,7 +27,7 @@ describe Station do
   end
 
   it 'send the train' do
-    @station.send(@fourth_train)
+    @station.remove(@fourth_train)
 
     expect(@station.trains.length).to eq(3)
   end

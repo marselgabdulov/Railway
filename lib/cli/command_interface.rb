@@ -33,6 +33,7 @@ class CommandInterface
       puts "Станция '#{name}' уже существует"
     else
       puts "Станция '#{name}' создана"
+      @current_station = station
     end
   end
 
@@ -66,7 +67,7 @@ class CommandInterface
 
   def new_train
     if @current_station.nil?
-      puts 'Нельзя создать поезд. Сперва создайте станцию'
+      puts 'Нельзя создать поезд. Сперва выберите или создайте станцию'
     else
       puts 'Введите категорию поезда (грузовой или пассажирский) и серийный номер. Например, грузовой 001'
       input = gets.chomp.split
@@ -206,8 +207,10 @@ class CommandInterface
       puts "Поезду #{@current_train.serial_number} не назначен маршрут"
     else
       begin
-        @current_train.previous_station.send(@current_train)
+        @current_train.previous_station.remove(@current_train)
         @current_train.forward
+        @cargo_train.current_station.add(@current_train)
+        @current_station = @current_train.current_station
       rescue RuntimeError => e
         puts e.message
       ensure
@@ -227,8 +230,10 @@ class CommandInterface
       puts "Поезду #{@current_train.serial_number} не назначен маршрут"
     else
       begin
-        @current_train.next_station.send(@current_train)
+        @current_train.next_station.remove(@current_train)
         @current_train.backward
+        @cargo_train.current_station.add(@current_train)
+        @current_station = @current_train.current_station
       rescue RuntimeError => e
         puts e.message
       ensure
@@ -314,6 +319,7 @@ class CommandInterface
   private
 
   def trains_lists
+    puts "На станции '#{@current_station.name}'"
     p "Грузовые: #{@current_station.trains.filter { |t| t.type == 'грузовой' }.collect(&:serial_number)}"
     p "Пассажирские: #{@current_station.trains.filter { |t| t.type == 'пассажирский' }.collect(&:serial_number)}"
   end
@@ -337,7 +343,6 @@ class CommandInterface
 
     station = Station.new(name)
     @stations << station
-    @current_station = station
     station
   end
 

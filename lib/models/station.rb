@@ -17,7 +17,7 @@ class Station
     @trains << train
   end
 
-  def send(train)
+  def remove(train)
     @trains.delete(train)
   end
 
