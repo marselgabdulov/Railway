@@ -9,6 +9,8 @@ class Train
   attr_reader :speed, :type, :wagons, :serial_number, :current_station_index
   attr_accessor :route
 
+  @@trains = []
+
   def initialize(serial_number)
     @serial_number = serial_number
     @speed = 0
@@ -16,6 +18,11 @@ class Train
     @wagons = []
     @current_station_index = nil
     @type = nil
+    @@trains << self
+  end
+
+  def self.find(serial_number)
+    @@trains.find { |t| t.serial_number == serial_number }
   end
 
   def accept_route(route)

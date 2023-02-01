@@ -15,6 +15,18 @@ describe Train do
     @train.accept_route(route)
   end
 
+  context 'find method' do
+    it 'finds existing instance' do
+      train = Train.new('911')
+
+      expect(Train.find('911')).to eq(train)
+    end
+
+    it 'returns nil to unexisting instance' do
+      expect(Train.find('002')).to eq(nil)
+    end
+  end
+
   context 'route' do
     it 'accepts new route' do
       route = Route.new('Химки', 'Москва')
