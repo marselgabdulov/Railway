@@ -8,9 +8,12 @@
 class Station
   attr_reader :name, :trains
 
+  @@stations = []
+
   def initialize(name)
     @name = name
     @trains = []
+    @@stations << self
   end
 
   def take(train)
@@ -23,5 +26,9 @@ class Station
 
   def filter_by_type(type)
     @trains.filter { |train| train.type == type }
+  end
+
+  def self.all
+    @@stations
   end
 end

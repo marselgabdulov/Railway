@@ -19,6 +19,14 @@ describe Station do
     @station.take(@fourth_train)
   end
 
+  context 'all' do
+    it 'returns all instances' do
+      station = Station.new('Химки')
+
+      expect(Station.all.last).to eq(station)
+    end
+  end
+
   it 'takes the train' do
     train = CargoTrain.new('CT-005')
     @station.take(train)
