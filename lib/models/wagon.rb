@@ -1,6 +1,6 @@
 # frozen_strin_literal :true
 
-require_relative 'producer_module'
+require_relative '../modules/producer'
 
 # class Wagon
 class Wagon
