@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
-# Cargo wagon
-class CargoWagon
-  attr_reader :type
+require_relative 'wagon'
 
+# Cargo wagon
+class CargoWagon < Wagon
   def initialize
+    super
     @type = 'грузовой'
   end
 end
