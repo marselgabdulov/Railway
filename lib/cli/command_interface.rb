@@ -61,7 +61,7 @@ class CommandInterface
   end
 
   def show_trains
-    p (@trains.collect { |t| "#{t.type} #{t.serial_number}" })
+    p(@trains.collect { |t| "#{t.type} #{t.serial_number}" })
   end
 
   def new_route

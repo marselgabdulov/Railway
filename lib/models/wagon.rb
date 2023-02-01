@@ -1,4 +1,4 @@
-# frozen_strin_literal :true
+# frozen_string_literal: true
 
 require_relative '../modules/producer'
 
