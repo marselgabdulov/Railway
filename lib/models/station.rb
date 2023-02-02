@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require './lib/modules/instance_counter'
+require_relative '../modules/instance_counter'
 
 # class Station
 class Station

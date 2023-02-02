@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require './lib/modules/instance_counter'
-require './lib/models/station'
-require './lib/models/route'
+require_relative '../../lib/modules/instance_counter'
+require_relative '../../lib/models/station'
+require_relative '../../lib/models/route'
 
 describe InstanceCounter do
   it 'counts route instances' do

@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require './lib/models/station'
-require './lib/models/cargo_train'
-require './lib/models/passenger_train'
+require_relative '../../lib/models/station'
+require_relative '../../lib/models/cargo_train'
+require_relative '../../lib/models/passenger_train'
 
 describe Station do
   before(:each) do
