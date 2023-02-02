@@ -23,7 +23,7 @@ describe Train do
     end
 
     it 'returns nil to unexisting instance' do
-      expect(Train.find('002')).to eq(nil)
+      expect(Train.find('874938484')).to eq(nil)
     end
   end
 

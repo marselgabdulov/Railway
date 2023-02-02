@@ -1,10 +1,13 @@
 # frozen_string_literal: true
 
-require_relative '../modules/'
+require_relative '../modules/producer'
+require_relative '../modules/instance_counter'
 
 # Train
 class Train
   include Producer
+  extend InstanceCounter::ClassMethods
+  include InstanceCounter::InstanceMethods
 
   attr_reader :speed, :type, :wagons, :serial_number, :current_station_index
   attr_accessor :route
@@ -19,6 +22,7 @@ class Train
     @current_station_index = nil
     @type = nil
     @@trains << self
+    register_instance
   end
 
   def self.find(serial_number)

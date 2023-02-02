@@ -1,11 +1,12 @@
 # frozen_string_literal: true
 
-# Station has initilized name,
-# can take arrived train,
-# can send the train,
-# shows list of all trains on station,
-# shows list of certain trains by type,
+require './lib/modules/instance_counter'
+
+# class Station
 class Station
+  extend InstanceCounter::ClassMethods
+  include InstanceCounter::InstanceMethods
+
   attr_reader :name, :trains
 
   @@stations = []
@@ -14,6 +15,7 @@ class Station
     @name = name
     @trains = []
     @@stations << self
+    register_instance
   end
 
   def take(train)

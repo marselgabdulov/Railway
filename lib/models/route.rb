@@ -1,15 +1,19 @@
 # frozen_string_literal: true
 
-# Route has initialized first and last stations,
-# can add and remove in-between station,
-# can show ordered list of stations
+require './lib/modules/instance_counter'
+
+# class Route
 class Route
+  extend InstanceCounter::ClassMethods
+  include InstanceCounter::InstanceMethods
+
   attr_reader :start, :finish, :stations
 
   def initialize(start, finish)
     @start = start
     @finish = finish
     @stations = [start, finish]
+    register_instance
   end
 
   def add(station)
