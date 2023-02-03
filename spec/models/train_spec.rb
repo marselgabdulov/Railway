@@ -15,6 +15,16 @@ describe Train do
     @train.accept_route(route)
   end
 
+  context 'serial number validation' do
+    it 'check valid serial number' do
+      expect(@train.send(:valid_serial_number?, 'ОПТ-12')).to be_truthy
+    end
+
+    it 'check invalid serial number' do
+      expect(@train.send(:valid_serial_number?, 'ОПТ-121')).to be_falsy
+    end
+  end
+
   context 'find method' do
     it 'finds existing instance' do
       train = Train.new('911')

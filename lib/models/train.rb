@@ -11,6 +11,7 @@ class Train
   attr_reader :speed, :type, :wagons, :serial_number, :current_station_index
   attr_accessor :route
 
+  SN_PATTERN = /^[a-zA-Zа-яА-Я0-9]{3}(-)?[a-zA-Zа-яА-Я0-9]{2}$/.freeze
   @@trains = []
 
   def initialize(serial_number)
@@ -86,5 +87,11 @@ class Train
     else
       @wagons.pop
     end
+  end
+
+  protected
+
+  def valid_serial_number?(serial_number)
+    SN_PATTERN.match?(serial_number)
   end
 end
