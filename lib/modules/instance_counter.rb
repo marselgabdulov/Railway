@@ -29,4 +29,9 @@ module InstanceCounter
       self.class.add_instance
     end
   end
+
+  def self.included(base)
+    base.extend(ClassMethods)
+    base.send(:include, InstanceMethods)
+  end
 end

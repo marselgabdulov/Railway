@@ -6,8 +6,7 @@ require_relative '../modules/instance_counter'
 # Train
 class Train
   include Producer
-  extend InstanceCounter::ClassMethods
-  include InstanceCounter::InstanceMethods
+  include InstanceCounter
 
   attr_reader :speed, :type, :wagons, :serial_number, :current_station_index
   attr_accessor :route
