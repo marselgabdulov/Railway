@@ -80,5 +80,4 @@ describe CommandInterface do
       expect(@commands.send(:find_object, @commands.stations, 'name', @station_one.name)).to be(@station_one)
     end
   end
-
 end
