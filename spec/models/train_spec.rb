@@ -6,7 +6,7 @@ require_relative '../../lib/models/cargo_wagon'
 
 describe Train do
   before(:each) do
-    @train = Train.new('001')
+    @train = Train.new('001-11')
     route = Route.new('Москва', 'Петушки')
     route.add('Кусково')
     route.add('Ольгино')
@@ -27,13 +27,13 @@ describe Train do
 
   context 'find method' do
     it 'finds existing instance' do
-      train = Train.new('911')
+      train = Train.new('911-11')
 
-      expect(Train.find('911')).to eq(train)
+      expect(Train.find('911-11')).to eq(train)
     end
 
     it 'returns nil to unexisting instance' do
-      expect(Train.find('874938484')).to eq(nil)
+      expect(Train.find('874-84')).to eq(nil)
     end
   end
 

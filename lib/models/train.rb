@@ -23,6 +23,7 @@ class Train
     @type = nil
     @@trains << self
     register_instance
+    valid?
   end
 
   def self.find(serial_number)
@@ -90,6 +91,17 @@ class Train
   end
 
   protected
+
+  def valid?
+    validate!
+    true
+  rescue StandartError
+    false
+  end
+
+  def validate!
+    raise 'Невалидный формат номера' unless valid_serial_number?(@serial_number)
+  end
 
   def valid_serial_number?(serial_number)
     SN_PATTERN.match?(serial_number)

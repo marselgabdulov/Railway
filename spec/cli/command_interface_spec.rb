@@ -16,8 +16,8 @@ describe CommandInterface do
     @station_two = Station.new('Тверь')
     @commands.stations << @station_one
     @commands.stations << @station_two
-    @train_one = PassengerTrain.new('001')
-    @train_two = CargoTrain.new('002')
+    @train_one = PassengerTrain.new('001-12')
+    @train_two = CargoTrain.new('002-CT')
     @commands.trains << @train_one
     @commands.trains << @train_two
     @route = Route.new(@station_one, @station_two)
@@ -40,13 +40,13 @@ describe CommandInterface do
 
   context 'create train' do
     it 'creates new train' do
-      @commands.send(:create_train, 'грузовой', '003')
+      @commands.send(:create_train, 'грузовой', 'CT8-03')
 
       expect(@commands.trains.length).to be(3)
     end
 
     it 'does not create train with exsisting serial number' do
-      @commands.send(:create_train, 'грузовой', '002')
+      @commands.send(:create_train, 'грузовой', @train_two.serial_number)
 
       expect(@commands.trains.length).to be(2)
     end

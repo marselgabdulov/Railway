@@ -6,10 +6,10 @@ require_relative '../../lib/models/passenger_train'
 
 describe Station do
   before(:each) do
-    @first_train = PassengerTrain.new('PT-001')
-    @second_train = PassengerTrain.new('PT-002')
-    @third_train = CargoTrain.new('CT-003')
-    @fourth_train = CargoTrain.new('CT-004')
+    @first_train = PassengerTrain.new('PT0-01')
+    @second_train = PassengerTrain.new('PT0-02')
+    @third_train = CargoTrain.new('CT0-03')
+    @fourth_train = CargoTrain.new('CT0-04')
 
     @station = Station.new('Москва Товарная')
 
@@ -28,7 +28,7 @@ describe Station do
   end
 
   it 'takes the train' do
-    train = CargoTrain.new('CT-005')
+    train = CargoTrain.new('CT9-05')
     @station.take(train)
 
     expect(@station.trains.length).to eq(5)
