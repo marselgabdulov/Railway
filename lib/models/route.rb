@@ -20,6 +20,7 @@ class Route
 
   def add(station)
     raise 'Станция должна быть экземпляром класса Station' if station.class.name != 'Station'
+    raise 'Станция уже присутствует в маршруте' if @stations.include?(station)
 
     @stations.insert(-2, station)
   end

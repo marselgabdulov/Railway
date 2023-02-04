@@ -10,27 +10,30 @@ describe Route do
     @station_one = Station.new('Кусково')
     @station_two = Station.new('Ольгино')
     @route = Route.new(start, finish)
+    @route.add(@station_one)
   end
 
   it 'shows stations' do
-    expect(@route.stations_list).to eq('Москва-Петушки')
+    expect(@route.stations_list).to eq('Москва-Кусково-Петушки')
   end
 
   context 'add' do
     it 'adds new station' do
-      @route.add(@station_one)
       @route.add(@station_two)
 
       expect(@route.stations.length).to eq(4)
     end
 
-    it 'raises error' do
+    it 'raises wrong type error' do
       expect { @route.add('Балогое') }.to raise_error(RuntimeError, 'Станция должна быть экземпляром класса Station')
+    end
+
+    it 'raises presence error' do
+      expect { @route.add(@station_one) }.to raise_error(RuntimeError, 'Станция уже присутствует в маршруте')
     end
   end
 
   it 'removes the station' do
-    @route.add(@station_one)
     @route.add(@station_two)
     @route.remove(@station_two)
 

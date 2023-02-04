@@ -87,15 +87,15 @@ class CommandInterface
     else
       puts 'Введите название станции'
       name = gets.chomp
-      if find_object(@routes.last.stations, 'name', name).nil?
+      begin
         station = create_station(name)
         @routes.last.add(station)
         puts "Станция '#{name}' добавлена в маршрут"
-      else
-        puts "Станция '#{name}' уже присутствует в маршруте"
+      rescue RuntimeError => e
+        puts e.message
       end
-      puts "Маршрут #{@routes.last.stations_list}"
     end
+    puts "Маршрут #{@routes.last.stations_list}"
   end
 
   def remove_from_route
