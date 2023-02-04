@@ -26,7 +26,6 @@ class CommandInterface
       puts "Станция '#{name}' уже существует"
     else
       puts "Станция '#{name}' создана"
-      @stations << station
     end
   end
 
@@ -236,9 +235,12 @@ class CommandInterface
   def create_station(name)
     return unless find_object(@stations, 'name', name).nil?
 
-    station = Station.new(name)
-    @stations << station
-    station
+    begin
+      station = Station.new(name)
+      @stations << station
+    rescue RuntimeError => e
+      puts e.message
+    end
   end
 
   def create_train(type, serial_number)
