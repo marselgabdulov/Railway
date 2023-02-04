@@ -19,6 +19,12 @@ describe Station do
     @station.take(@fourth_train)
   end
 
+  context 'validate!' do
+    it 'raises error' do
+      expect { Station.new(123) }.to raise_error(RuntimeError, 'Наименование станции должно быть строкой')
+    end
+  end
+
   context 'all' do
     it 'returns all instances' do
       station = Station.new('Химки')
@@ -27,11 +33,19 @@ describe Station do
     end
   end
 
-  it 'takes the train' do
-    train = CargoTrain.new('CT9-05')
-    @station.take(train)
+  context 'take' do
+    it 'takes the train' do
+      train = CargoTrain.new('CT9-05')
+      @station.take(train)
 
-    expect(@station.trains.length).to eq(5)
+      expect(@station.trains.length).to eq(5)
+    end
+
+    it 'raises error' do
+      expect do
+        @station.take('поезд')
+      end.to raise_error(RuntimeError, 'Поезд должен быть экземпляром класса Train, CargoTrain или PassengerTrain')
+    end
   end
 
   it 'send the train' do

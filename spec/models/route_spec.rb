@@ -39,7 +39,10 @@ describe Route do
 
   context 'validate!' do
     it 'raises error' do
-      expect { Route.new('Москва', @station_two) }.to raise_error(RuntimeError, 'Начало маршрута должно быть экземпляром класса Station')
+      expect do
+        Route.new('Москва',
+                  @station_two)
+      end.to raise_error(RuntimeError, 'Начало маршрута должно быть экземпляром класса Station')
     end
   end
 end
