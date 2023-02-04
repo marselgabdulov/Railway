@@ -19,13 +19,13 @@ describe Station do
     @station.take(@fourth_train)
   end
 
-  context 'validate!' do
+  context '#validate!' do
     it 'raises error' do
       expect { Station.new(123) }.to raise_error(RuntimeError, 'Наименование станции должно быть строкой')
     end
   end
 
-  context 'all' do
+  context '#self.all' do
     it 'returns all instances' do
       station = Station.new('Химки')
 
@@ -33,7 +33,7 @@ describe Station do
     end
   end
 
-  context 'take' do
+  context '#take' do
     it 'takes the train' do
       train = CargoTrain.new('CT9-05')
       @station.take(train)
@@ -48,13 +48,13 @@ describe Station do
     end
   end
 
-  it 'send the train' do
+  it '#remove' do
     @station.remove(@fourth_train)
 
     expect(@station.trains.length).to eq(3)
   end
 
-  it 'filters trains by type' do
+  it '#filter_by_type' do
     passenger_trains = @station.filter_by_type('пассажирский')
 
     expect(passenger_trains.length).to eq(2)

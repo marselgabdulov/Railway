@@ -12,7 +12,7 @@ describe CargoTrain do
     @passenger_wagon = PassengerWagon.new
   end
 
-  context 'add wagon' do
+  context '#add_wagon' do
     it 'adds wagon' do
       @cargo_train.add_wagon(@cargo_wagon)
 
@@ -26,7 +26,7 @@ describe CargoTrain do
     end
   end
 
-  context 'remove wagon' do
+  context '#remove_wagon' do
     it 'raises error on moving' do
       @cargo_train.send(:add_wagon, @cargo_wagon)
       @cargo_train.accelerate(50)

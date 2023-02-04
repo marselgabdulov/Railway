@@ -12,7 +12,7 @@ describe PassengerTrain do
     @cargo_wagon = CargoWagon.new
   end
 
-  context 'add wagon' do
+  context '#add_wagon' do
     it 'adds wagon' do
       @passenger_train.add_wagon(@passenger_wagon)
 
@@ -23,6 +23,17 @@ describe PassengerTrain do
       expect do
         @passenger_train.add_wagon(@cargo_wagon)
       end.to raise_error(RuntimeError, 'Нельзя добавить вагон другого типа')
+    end
+  end
+
+  context '#remove_wagon' do
+    it 'raises error on moving' do
+      @passenger_train.send(:add_wagon, @passenger_wagon)
+      @passenger_train.accelerate(50)
+
+      expect do
+        @passenger_train.send(:remove_wagon)
+      end.to raise_error(RuntimeError, 'Поезд в движении. Операция невозможна')
     end
   end
 end

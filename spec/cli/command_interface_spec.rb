@@ -24,7 +24,7 @@ describe CommandInterface do
     @commands.routes << @route
   end
 
-  context 'create station' do
+  context '#create_station' do
     it 'creates new station' do
       @commands.send(:create_station, 'Химки')
 
@@ -38,7 +38,7 @@ describe CommandInterface do
     end
   end
 
-  context 'create train' do
+  context '#create_train' do
     it 'creates new train' do
       subject { @commands.send(:create_train, 'CargoTrain') }
       allow(subject).to receive(:gets).and_return('001-TR')
@@ -54,7 +54,7 @@ describe CommandInterface do
     end
   end
 
-  context 'find_object' do
+  context '#find_object' do
     it 'finds object' do
       expect(@commands.send(:find_object, @commands.stations, 'name', @station_one.name)).to be(@station_one)
     end

@@ -13,11 +13,11 @@ describe Route do
     @route.add(@station_one)
   end
 
-  it 'shows stations' do
+  it '#station_list' do
     expect(@route.stations_list).to eq('Москва-Кусково-Петушки')
   end
 
-  context 'add' do
+  context '#add' do
     it 'adds new station' do
       @route.add(@station_two)
 
@@ -33,7 +33,7 @@ describe Route do
     end
   end
 
-  it 'removes the station' do
+  it '#remove' do
     @route.add(@station_two)
     @route.remove(@station_two)
 
