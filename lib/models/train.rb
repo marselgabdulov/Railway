@@ -2,11 +2,13 @@
 
 require_relative '../modules/producer'
 require_relative '../modules/instance_counter'
+require_relative '../modules/validator'
 
 # Train
 class Train
   include Producer
   include InstanceCounter
+  include Validator
 
   attr_reader :speed, :type, :wagons, :serial_number, :current_station_index
   attr_accessor :route
@@ -91,13 +93,6 @@ class Train
   end
 
   protected
-
-  def valid?
-    validate!
-    true
-  rescue StandartError
-    false
-  end
 
   def validate!
     raise 'Невалидный формат номера' unless valid_serial_number?(@serial_number)
