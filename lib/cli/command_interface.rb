@@ -172,12 +172,13 @@ class CommandInterface
     if @trains.empty?
       puts 'Нельзя прицепить вагон к несуществующему поезду'
     else
-      if @trains.last.type == 'грузовой'
-        @trains.last.add_wagon(CargoWagon.new)
-      else
-        @trains.last.add_wagon(PassengerWagon.new)
+      wagon = @trains.last.type == 'грузовой' ? CargoWagon.new : PassengerWagon.new
+      begin
+        @trains.last.add_wagon(wagon)
+        puts "Вагон прицеплен к поезду #{@trains.last.serial_number}"
+      rescue RuntimeError => e
+        e.message
       end
-      puts "Вагон прицеплен к поезду #{@trains.last.serial_number}"
     end
   end
 
