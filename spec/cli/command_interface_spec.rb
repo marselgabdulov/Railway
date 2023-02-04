@@ -40,15 +40,17 @@ describe CommandInterface do
 
   context 'create train' do
     it 'creates new train' do
-      @commands.send(:create_train, 'грузовой', 'CT8-03')
+      subject { @commands.send(:create_train, 'CargoTrain') }
+      allow(subject).to receive(:gets).and_return('001-TR')
 
-      expect(@commands.trains.length).to be(3)
+      expect(@commands.trains.length).equal?(3)
     end
 
     it 'does not create train with exsisting serial number' do
-      @commands.send(:create_train, 'грузовой', @train_two.serial_number)
+      subject { @commands.send(:create_train, 'CargoTrain') }
+      allow(subject).to receive(:gets).and_return(@train_one.serial_number)
 
-      expect(@commands.trains.length).to be(2)
+      expect(@commands.trains.length).equal?(2)
     end
   end
 

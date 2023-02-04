@@ -46,17 +46,11 @@ class CommandInterface
   end
 
   def new_train
-    puts 'Введите тип поезда (грузовой или пассажирский) и сериный номер. Например, грузовой 001'
-    input = gets.chomp.split
-    type = input[0]
-    serial_number = input[1]
-    train = if type == 'грузовой'
-              CargoTrain.new(serial_number)
-            else
-              PassengerTrain.new(serial_number)
-            end
-    @trains << train
-    puts "Поезд #{serial_number} создан"
+    puts 'Введите 1 чтобы создать грузовой или что угодно для создания пассажирского'
+    type = gets.chomp
+    puts 'Введите серийный номер в формате: 3 цифры или буквы, необязятельный дефис, и 2 цифры или буквы.'
+    puts 'Например, 001-ПП'
+    type == '1' ? create_train('CargoTrain') : create_train('PassengerTrain')
   end
 
   def show_trains
@@ -243,16 +237,22 @@ class CommandInterface
     end
   end
 
-  def create_train(type, serial_number)
-    return unless find_object(@trains, 'serial_number', serial_number).nil?
-
-    train = if type == 'грузовой'
-              CargoTrain.new(serial_number)
-            else
-              PassengerTrain.new(serial_number)
-            end
-    @trains << train
-    train
+  def create_train(type)
+    while (serial_number = gets.chomp)
+      if find_object(@trains, 'serial_number', serial_number).nil?
+        begin
+          train = Kernel.const_get(type).new(serial_number)
+          @trains << train
+          puts "Поезд #{serial_number} создан"
+          break
+        rescue RuntimeError => e
+          puts e.message
+          puts 'Введите серийный номер в формате ХХХ-ХХ'
+        end
+      else
+        puts 'Поезд с таким серийным номером уже существует'
+      end
+    end
   end
 
   def find_object(where, attribute, value)
