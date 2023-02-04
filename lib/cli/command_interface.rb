@@ -21,12 +21,7 @@ class CommandInterface
   def new_station
     puts 'Введите название станции'
     name = gets.chomp
-    station = create_station(name)
-    if station.nil?
-      puts "Станция '#{name}' уже существует"
-    else
-      puts "Станция '#{name}' создана"
-    end
+    create_station(name)
   end
 
   def show_stations
@@ -231,14 +226,17 @@ class CommandInterface
   end
 
   def create_station(name)
-    return unless find_object(@stations, 'name', name).nil?
-
-    begin
-      station = Station.new(name)
-      @stations << station
-      station
-    rescue RuntimeError => e
-      puts e.message
+    if find_object(@stations, 'name', name).nil?
+      begin
+        station = Station.new(name)
+        @stations << station
+        puts "Станция '#{name}' создана"
+        station
+      rescue RuntimeError => e
+        puts e.message
+      end
+    else
+      puts "Станция '#{name}' уже существует"
     end
   end
 
