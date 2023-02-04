@@ -64,9 +64,13 @@ class CommandInterface
     finish = gets.chomp
     start_station = create_station(start)
     finish_station = create_station(finish)
-    route = Route.new(start_station, finish_station)
-    @routes << route
-    puts "Маршрут '#{start} - #{finish}' построен"
+    begin
+      route = Route.new(start_station, finish_station)
+      @routes << route
+      puts "Маршрут '#{start} - #{finish}' построен"
+    rescue RuntimeError => e
+      puts e.message
+    end
   end
 
   def show_route
@@ -232,6 +236,7 @@ class CommandInterface
     begin
       station = Station.new(name)
       @stations << station
+      station
     rescue RuntimeError => e
       puts e.message
     end
