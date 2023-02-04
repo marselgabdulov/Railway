@@ -104,13 +104,15 @@ class CommandInterface
     else
       puts 'Введите название станции'
       name = gets.chomp
-      if find_object(@routes.last.stations, 'name', name).nil?
-        puts "Станции #{name} нет в маршруте"
-      else
-        @routes.last.remove(find_object(@stations, 'name', name))
+      begin
+        station = find_object(@routes.last.stations, 'name', name)
+        @routes.last.remove(station)
         puts "Станция #{name} удалена из маршрута"
+        puts "Маршрут #{@routes.last.stations_list}"
+      rescue RuntimeError => e
+        puts e.message
+        puts "Маршрут #{@routes.last.stations_list}"
       end
-      puts "Маршрут #{@routes.last.stations_list}"
     end
   end
 

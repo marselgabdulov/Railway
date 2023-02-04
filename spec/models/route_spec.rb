@@ -33,12 +33,20 @@ describe Route do
     end
   end
 
-  it '#remove' do
-    @route.add(@station_two)
-    @route.remove(@station_two)
+  context '#remove' do
+    it 'removes' do
+      @route.add(@station_two)
+      @route.remove(@station_two)
 
-    expect(@route.stations.length).to eq(3)
+      expect(@route.stations.length).to eq(3)
+    end
+
+    it 'raises not exisiting error' do
+      expect { @route.remove(@station_two) }.to raise_error(RuntimeError, 'Станции нет в маршруте')
+    end
   end
+
+
 
   context 'validate!' do
     it 'raises error' do

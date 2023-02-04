@@ -26,6 +26,8 @@ class Route
   end
 
   def remove(station)
+    raise 'Станции нет в маршруте' unless @stations.include?(station)
+
     @stations.delete(station)
   end
 
