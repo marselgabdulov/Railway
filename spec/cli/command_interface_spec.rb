@@ -14,8 +14,10 @@ describe CommandInterface do
     @commands = CommandInterface.new
     @station_one = Station.new('Москва')
     @station_two = Station.new('Тверь')
+    @station_three = Station.new('Химки')
     @commands.stations << @station_one
     @commands.stations << @station_two
+    @commands.stations << @station_three
     @train_one = PassengerTrain.new('001-12')
     @train_two = CargoTrain.new('002-CT')
     @commands.trains << @train_one
@@ -24,17 +26,36 @@ describe CommandInterface do
     @commands.routes << @route
   end
 
+  context '#train_forward' do
+    it 'moves forward' do
+      @commands.send(:route_to_train)
+      @commands.send(:train_forward)
+
+      expect(@commands.trains.last.current_station_index).to be(1)
+    end
+  end
+
+  context '#train_backward' do
+    it 'moves backward' do
+      @commands.send(:route_to_train)
+      @commands.send(:train_forward)
+      @commands.send(:train_forward)
+
+      expect(@commands.trains.last.current_station_index).to be(1)
+    end
+  end
+
   context '#create_station' do
     it 'creates new station' do
-      @commands.send(:create_station, 'Химки')
+      @commands.send(:create_station, 'Балогое')
 
-      expect(@commands.stations.length).to be(3)
+      expect(@commands.stations.length).to be(4)
     end
 
     it 'does not create station with exsisting name' do
       @commands.send(:create_station, 'Москва')
 
-      expect(@commands.stations.length).to be(2)
+      expect(@commands.stations.length).to be(3)
     end
   end
 
@@ -59,4 +80,5 @@ describe CommandInterface do
       expect(@commands.send(:find_object, @commands.stations, 'name', @station_one.name)).to be(@station_one)
     end
   end
+
 end

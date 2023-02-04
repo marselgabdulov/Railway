@@ -87,13 +87,10 @@ class CommandInterface
     else
       puts 'Введите название станции'
       name = gets.chomp
-      begin
-        station = create_station(name)
-        @routes.last.add(station)
-        puts "Станция '#{name}' добавлена в маршрут"
-      rescue RuntimeError => e
-        puts e.message
-      end
+
+      station = create_station(name)
+      @routes.last.add(station)
+      puts "Станция '#{name}' добавлена в маршрут"
     end
     puts "Маршрут #{@routes.last.stations_list}"
   end
@@ -130,6 +127,7 @@ class CommandInterface
   end
 
   def train_forward
+    train = @trains.last
     if @routes.last.nil? && @trains.last.nil?
       puts 'Не созданы ни маршрут, ни поезд'
     elsif @routes.last.nil?
@@ -138,32 +136,32 @@ class CommandInterface
       puts 'Не создан поезд'
     else
       begin
-        @trains.last.forward
-        @trains.last.previous_station.remove(@trains.last)
-        @trains.last.current_station.take(@trains.last)
+        train.forward
+        train.previous_station.remove(train)
+        train.current_station.take(train)
+        train_position_message
       rescue RuntimeError => e
         puts e.message
-      ensure
-        puts "Поезд номер #{@trains.last.serial_number} находится на станции #{@routes.last.stations[@trains.last.current_station_index].name}"
       end
     end
   end
 
   def train_backward
+    train = @trains.last
     if @routes.last.nil? && @trains.last.nil?
       puts 'Не созданы ни маршрут, ни поезд'
     elsif @routes.last.nil?
       puts 'Не создан маршрут'
     elsif @trains.last.nil?
       puts 'Не создан поезд'
+    else
       begin
-        @trains.last.backward
-        @trains.last.next_station.remove(@trains.last)
-        @trains.last.current_station.take(@trains.last)
+        train.backward
+        train.next_station.remove(train)
+        train.current_station.take(train)
+        train_position_message
       rescue RuntimeError => e
         puts e.message
-      ensure
-        puts "Поезд номер #{@trains.last.serial_number} находится на станции #{@routes.last.stations[@trains.last.current_station_index].name}"
       end
     end
   end
@@ -221,6 +219,10 @@ class CommandInterface
 
   # Методы ниже служебные, поэтому я их закрыл для внешнего доступа
   private
+
+  def train_position_message
+    puts "Поезд номер #{@trains.last.serial_number} находится на станции #{@routes.last.stations[@trains.last.current_station_index].name}"
+  end
 
   def trains_lists
     puts "На станции '#{@stations.last.name}'"

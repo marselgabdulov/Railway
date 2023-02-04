@@ -85,7 +85,7 @@ describe Train do
     it 'raises nil route error' do
       @train.route = nil
 
-      expect { @train.forward }.to raise_error(RuntimeError, 'Поезду не назначен маршрут')
+      expect { @train.forward }.to raise_error(RuntimeError, 'Маршрут не задан')
     end
   end
 

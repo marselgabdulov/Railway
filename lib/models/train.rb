@@ -10,8 +10,8 @@ class Train
   include InstanceCounter
   include Validator
 
-  attr_reader :speed, :type, :wagons, :serial_number, :current_station_index
-  attr_accessor :route
+  attr_reader :speed, :type, :wagons, :serial_number
+  attr_accessor :route, :current_station_index
 
   SN_PATTERN = /^[a-zA-Zа-яА-Я0-9]{3}(-)?[a-zA-Zа-яА-Я0-9]{2}$/.freeze
   @@trains = []
@@ -33,37 +33,42 @@ class Train
   end
 
   def accept_route(route)
-    @route = route
     @current_station_index = 0
+    @route = route
   end
 
   def next_station
-    raise 'Маршрут не задан' if @route.nil?
-
-    @route.stations[@current_station_index + 1]
+    no_route_error
+    if @current_station_index == @route.stations.length - 1
+      @route.stations[@current_station_index]
+    else
+      @route.stations[@current_station_index + 1]
+    end
   end
 
   def current_station
-    raise 'Маршрут не задан' if @route.nil?
-
+    no_route_error
     @route.stations[@current_station_index]
   end
 
   def previous_station
-    raise 'Маршрут не задан' if @route.nil?
-
-    @route.stations[@current_station_index - 1]
+    no_route_error
+    if @current_station_index.zero?
+      @route.stations[0]
+    else
+      @route.stations[@current_station_index - 1]
+    end
   end
 
   def forward
-    raise 'Поезду не назначен маршрут' if @route.nil?
+    no_route_error
     raise 'Движение вперед невозможно' if @current_station_index == @route.stations.length - 1
 
     @current_station_index += 1
   end
 
   def backward
-    raise 'Поезду не назначен маршрут' if @route.nil?
+    no_route_error
     raise 'Движение назад невозможно' if @current_station_index.zero?
 
     @current_station_index -= 1
@@ -95,6 +100,10 @@ class Train
   end
 
   protected
+
+  def no_route_error
+    raise 'Маршрут не задан' if @route.nil?
+  end
 
   def validate!
     raise 'Невалидный формат номера' unless valid_serial_number?(@serial_number)
