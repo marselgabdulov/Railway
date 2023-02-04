@@ -260,10 +260,4 @@ class CommandInterface
   def find_object(where, attribute, value)
     where.select { |i| i.method(attribute).call == value }.first
   end
-
-  def numbered_routes
-    @routes.each_with_index.map do |route, index|
-      "#{index + 1}. #{route.stations_list}"
-    end
-  end
 end

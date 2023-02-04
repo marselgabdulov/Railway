@@ -46,8 +46,6 @@ describe Route do
     end
   end
 
-
-
   context 'validate!' do
     it 'raises error' do
       expect do
