@@ -5,7 +5,7 @@ module Validator
   protected
 
   def valid?
-    # Предложенный в комменатриях к скринкасту вариант в rescue не отлавливает ошибки
+    # Предложенный в комментариях к скринкасту вариант в rescue не отлавливает ошибки
     validate! ? true : false
   end
 end

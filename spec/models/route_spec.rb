@@ -16,11 +16,17 @@ describe Route do
     expect(@route.stations_list).to eq('Москва-Петушки')
   end
 
-  it 'adds new station' do
-    @route.add(@station_one)
-    @route.add(@station_two)
+  context 'add' do
+    it 'adds new station' do
+      @route.add(@station_one)
+      @route.add(@station_two)
 
-    expect(@route.stations.length).to eq(4)
+      expect(@route.stations.length).to eq(4)
+    end
+
+    it 'raises error' do
+      expect { @route.add('Балогое') }.to raise_error(RuntimeError, 'Станция должна быть экземпляром класса Station')
+    end
   end
 
   it 'removes the station' do
@@ -29,5 +35,11 @@ describe Route do
     @route.remove(@station_two)
 
     expect(@route.stations.length).to eq(3)
+  end
+
+  context 'validate!' do
+    it 'raises error' do
+      expect { Route.new('Москва', @station_two) }.to raise_error(RuntimeError, 'Начало маршрута должно быть экземпляром класса Station')
+    end
   end
 end

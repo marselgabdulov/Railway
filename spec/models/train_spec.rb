@@ -1,15 +1,20 @@
 # frozen_string_literal: true
 
 require_relative '../../lib/models/train'
+require_relative '../../lib/models/station'
 require_relative '../../lib/models/route'
 require_relative '../../lib/models/cargo_wagon'
 
 describe Train do
   before(:each) do
     @train = Train.new('001-11')
-    route = Route.new('Москва', 'Петушки')
-    route.add('Кусково')
-    route.add('Ольгино')
+    @station_one = Station.new('Москва')
+    @station_two = Station.new('Петушки')
+    @station_three = Station.new('Кусково')
+    @station_four = Station.new('Ольгино')
+    route = Route.new(@station_one, @station_two)
+    route.add(@station_three)
+    route.add(@station_four)
     @wagon = CargoWagon.new
 
     @train.accept_route(route)
@@ -39,10 +44,10 @@ describe Train do
 
   context 'route' do
     it 'accepts new route' do
-      route = Route.new('Химки', 'Москва')
+      route = Route.new(@station_two, @station_one)
       @train.accept_route(route)
 
-      expect(@train.current_station).to eq('Химки')
+      expect(@train.current_station).to eq(@station_two)
     end
 
     it 'raises error if route not accepted' do
@@ -54,13 +59,13 @@ describe Train do
     it 'returns next station' do
       @train.forward
 
-      expect(@train.next_station).to eq('Ольгино')
+      expect(@train.next_station).to eq(@station_four)
     end
 
     it 'returns previos station' do
       @train.forward
 
-      expect(@train.previous_station).to eq('Москва')
+      expect(@train.previous_station).to eq(@station_one)
     end
   end
 
@@ -68,7 +73,7 @@ describe Train do
     it 'moves to the next station' do
       2.times { @train.forward }
 
-      expect(@train.current_station).to eq('Ольгино')
+      expect(@train.current_station).to eq(@station_four)
     end
 
     it 'raises error if on finish' do
@@ -83,7 +88,7 @@ describe Train do
       2.times { @train.forward }
       @train.backward
 
-      expect(@train.current_station).to eq('Кусково')
+      expect(@train.current_station).to eq(@station_three)
     end
 
     it 'raises error if on start' do
