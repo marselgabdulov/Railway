@@ -134,8 +134,6 @@ class CommandInterface
       puts 'Не создан маршрут'
     elsif @trains.last.nil?
       puts 'Не создан поезд'
-    elsif @trains.last.route.nil?
-      puts "Поезду #{@trains.last.serial_number} не назначен маршрут"
     else
       begin
         @trains.last.forward
@@ -156,9 +154,6 @@ class CommandInterface
       puts 'Не создан маршрут'
     elsif @trains.last.nil?
       puts 'Не создан поезд'
-    elsif @trains.last.route.nil?
-      puts "Поезду #{@trains.last.serial_number} не назначен маршрут"
-    else
       begin
         @trains.last.backward
         @trains.last.next_station.remove(@trains.last)

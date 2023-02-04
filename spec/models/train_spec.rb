@@ -20,7 +20,7 @@ describe Train do
     @train.accept_route(route)
   end
 
-  context 'serial number validation' do
+  context '#valid_serial_number?' do
     it 'check valid serial number' do
       expect(@train.send(:valid_serial_number?, 'ОПТ-12')).to be_truthy
     end
@@ -30,7 +30,7 @@ describe Train do
     end
   end
 
-  context 'find method' do
+  context '#self.find' do
     it 'finds existing instance' do
       train = Train.new('911-11')
 
@@ -42,7 +42,7 @@ describe Train do
     end
   end
 
-  context 'route' do
+  context '#accept_route' do
     it 'accepts new route' do
       route = Route.new(@station_two, @station_one)
       @train.accept_route(route)
@@ -55,21 +55,21 @@ describe Train do
 
       expect { @train.current_station }.to raise_error(RuntimeError, 'Маршрут не задан')
     end
-
-    it 'returns next station' do
-      @train.forward
-
-      expect(@train.next_station).to eq(@station_four)
-    end
-
-    it 'returns previos station' do
-      @train.forward
-
-      expect(@train.previous_station).to eq(@station_one)
-    end
   end
 
-  context 'move forward' do
+  it '#next_station' do
+    @train.forward
+
+    expect(@train.next_station).to eq(@station_four)
+  end
+
+  it '#previos_station' do
+    @train.forward
+
+    expect(@train.previous_station).to eq(@station_one)
+  end
+
+  context '#forward' do
     it 'moves to the next station' do
       2.times { @train.forward }
 
@@ -81,9 +81,15 @@ describe Train do
 
       expect { @train.forward }.to raise_error(RuntimeError, 'Движение вперед невозможно')
     end
+
+    it 'raises nil route error' do
+      @train.route = nil
+
+      expect { @train.forward }.to raise_error(RuntimeError, 'Поезду не назначен маршрут')
+    end
   end
 
-  context 'move backward' do
+  context '#backward' do
     it 'moves to the previous station' do
       2.times { @train.forward }
       @train.backward
@@ -96,19 +102,19 @@ describe Train do
     end
   end
 
-  it 'accelerates' do
+  it '#accelerate' do
     @train.accelerate(50)
 
     expect(@train.speed).to eq(50)
   end
 
-  it 'brakes' do
+  it '#brake' do
     @train.brake
 
     expect(@train.speed).to eq(0)
   end
 
-  context 'add wagon' do
+  context '#add_wagon' do
     it 'raises moving error' do
       @train.accelerate(50)
 
@@ -116,7 +122,7 @@ describe Train do
     end
   end
 
-  context 'remove wagon' do
+  context '#remove_wagon' do
     it 'raises empty train error' do
       expect do
         @train.send(:remove_wagon)

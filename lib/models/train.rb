@@ -56,12 +56,14 @@ class Train
   end
 
   def forward
+    raise 'Поезду не назначен маршрут' if @route.nil?
     raise 'Движение вперед невозможно' if @current_station_index == @route.stations.length - 1
 
     @current_station_index += 1
   end
 
   def backward
+    raise 'Поезду не назначен маршрут' if @route.nil?
     raise 'Движение назад невозможно' if @current_station_index.zero?
 
     @current_station_index -= 1
