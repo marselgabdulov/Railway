@@ -26,7 +26,7 @@ class CommandInterface
 
   def show_stations
     if @stations.empty?
-      puts 'Еше не создано ни одной станции'
+      puts 'Еще не создано ни одной станции'
     else
       p @stations.collect(&:name)
     end
@@ -86,8 +86,8 @@ class CommandInterface
       station = create_station(name)
       @routes.last.add(station)
       puts "Станция '#{name}' добавлена в маршрут"
+      puts "Маршрут #{@routes.last.stations_list}"
     end
-    puts "Маршрут #{@routes.last.stations_list}"
   end
 
   def remove_from_route
@@ -109,13 +109,7 @@ class CommandInterface
   end
 
   def route_to_train
-    if @routes.empty? && @trains.empty?
-      puts 'Не созданы ни маршрут, ни поезд'
-    elsif @routes.empty?
-      puts 'Не создан маршрут'
-    elsif @trains.empty?
-      puts 'Не создан поезд'
-    else
+    train_errors do
       @trains.last.accept_route(@routes.last)
       puts "Поезду #{@trains.last.serial_number} назначен маршрут #{@routes.last.stations_list}"
     end
@@ -123,13 +117,7 @@ class CommandInterface
 
   def train_forward
     train = @trains.last
-    if @routes.last.nil? && @trains.last.nil?
-      puts 'Не созданы ни маршрут, ни поезд'
-    elsif @routes.last.nil?
-      puts 'Не создан маршрут'
-    elsif @trains.last.nil?
-      puts 'Не создан поезд'
-    else
+    train_errors do
       begin
         train.forward
         train.previous_station.remove(train)
@@ -143,13 +131,7 @@ class CommandInterface
 
   def train_backward
     train = @trains.last
-    if @routes.last.nil? && @trains.last.nil?
-      puts 'Не созданы ни маршрут, ни поезд'
-    elsif @routes.last.nil?
-      puts 'Не создан маршрут'
-    elsif @trains.last.nil?
-      puts 'Не создан поезд'
-    else
+    train_errors do
       begin
         train.backward
         train.next_station.remove(train)
@@ -170,7 +152,7 @@ class CommandInterface
         @trains.last.add_wagon(wagon)
         puts "Вагон прицеплен к поезду #{@trains.last.serial_number}"
       rescue RuntimeError => e
-        e.message
+        puts e.message
       end
     end
   end
@@ -214,6 +196,18 @@ class CommandInterface
 
   # Методы ниже служебные, поэтому я их закрыл для внешнего доступа
   private
+
+  def train_errors
+    if @routes.empty? && @trains.empty?
+      puts 'Не созданы ни маршрут, ни поезд'
+    elsif @routes.empty?
+      puts 'Не создан маршрут'
+    elsif @trains.empty?
+      puts 'Не создан поезд'
+    else
+      yield
+    end
+  end
 
   def train_position_message
     puts "Поезд номер #{@trains.last.serial_number} находится на станции #{@routes.last.stations[@trains.last.current_station_index].name}"
