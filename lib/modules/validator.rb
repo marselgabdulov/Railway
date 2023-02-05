@@ -7,7 +7,9 @@ module Validator
   protected
 
   def valid?
-    # Предложенный в комментариях к скринкасту вариант в rescue не отлавливает ошибки
-    validate! ? true : false
+    validate!
+    true
+  rescue
+    false
   end
 end

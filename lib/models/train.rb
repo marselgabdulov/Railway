@@ -23,9 +23,9 @@ class Train
     @wagons = []
     @current_station_index = nil
     @type = nil
+    validate!
     @@trains << self
     register_instance
-    valid?
   end
 
   def self.find(serial_number)

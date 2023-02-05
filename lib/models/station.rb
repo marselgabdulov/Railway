@@ -16,8 +16,8 @@ class Station
     @name = name
     @trains = []
     @@stations << self
+    validate!
     register_instance
-    valid?
   end
 
   def take(train)
