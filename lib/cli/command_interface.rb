@@ -58,7 +58,7 @@ class CommandInterface
       puts 'Не создано ни одного поезда'
     else
       @stations.each do |station|
-        puts "'#{station.name}':"
+        puts "На станции '#{station.name}':"
         if station.trains.empty?
           puts 'Поездов нет'
         else
@@ -161,7 +161,7 @@ class CommandInterface
     if @trains.empty?
       puts 'Нельзя прицепить вагон к несуществующему поезду'
     else
-      wagon = @trains.last.type == 'грузовой' ? CargoWagon.new : PassengerWagon.new
+      wagon = @trains.last.type == 'грузовой' ? create_cargo_wagon : create_passenger_wagon
       begin
         @trains.last.add_wagon(wagon)
         puts "Вагон прицеплен к поезду #{@trains.last.serial_number}"
@@ -265,6 +265,22 @@ class CommandInterface
         puts 'Поезд с таким серийным номером уже существует'
       end
     end
+  end
+
+  def create_cargo_wagon
+    puts 'Введите объем вагона'
+    value = gets.chomp.to_f
+    wagon = CargoWagon.new(value)
+    puts "Грузовой вагон объемом #{value} единиц создан"
+    wagon
+  end
+
+  def create_passenger_wagon
+    puts 'Введите количество мест'
+    seats = gets.chomp.to_i
+    wagon = PassengerWagon.new(seats)
+    puts "Пассажирский вагон на #{seats} мест создан"
+    wagon
   end
 
   def find_object(where, attribute, value)
