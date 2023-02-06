@@ -100,7 +100,7 @@ class Train
   end
 
   def each_wagon(&block)
-    @wagons.collect(&block)
+    @wagons.map(&block)
   end
 
   protected

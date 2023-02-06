@@ -92,12 +92,10 @@ class CommandInterface
       puts 'Не создано ни одного поезда'
     elsif @trains.last.wagons.empty?
       puts 'Вагонов еще нет'
+    elsif @trains.last.wagons.last.type == 'грузовой'
+      fill_cargo_wagon
     else
-      if @trains.last.wagons.last.type == 'грузовой'
-        fill_cargo_wagon
-      else
-        fill_passenger_wagon
-      end
+      fill_passenger_wagon
     end
   end
 

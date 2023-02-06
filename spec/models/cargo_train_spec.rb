@@ -43,7 +43,7 @@ describe CargoTrain do
       @cargo_train.add_wagon(@cargo_wagon)
       @cargo_train.add_wagon(wagon)
 
-      expect(@cargo_train.each_wagon(&:type)).to eq([@cargo_wagon.type, "грузовой"])
+      expect(@cargo_train.each_wagon(&:type)).to eq([@cargo_wagon.type, 'грузовой'])
     end
   end
 end

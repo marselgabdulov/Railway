@@ -42,7 +42,7 @@ class Station
   end
 
   def each_train(&block)
-    @trains.collect(&block)
+    @trains.map(&block)
   end
 
   private
