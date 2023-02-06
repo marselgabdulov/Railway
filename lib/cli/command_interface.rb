@@ -70,6 +70,23 @@ class CommandInterface
     end
   end
 
+  def wagon_list
+    if @trains.empty?
+      puts 'Не создано ни одного поезда'
+    elsif @trains.last.wagons.empty?
+      puts 'Вагонов еще нет'
+    else
+      train = @trains.last
+      train.each_wagon do |w|
+        if train.type == 'грузовой'
+          puts "Вагон номер '#{w.serial_number}', тип #{w.type}, свободно: #{w.free_volume} единиц, занято: #{w.taken_volume} единиц"
+        else
+          puts "Вагон номер '#{w.serial_number}', тип #{w.type}, свободно: #{w.free_seats} мест, занято: #{w.taken_seats} мест"
+        end
+      end
+    end
+  end
+
   def new_route
     puts 'Введите начало машрута'
     start = gets.chomp

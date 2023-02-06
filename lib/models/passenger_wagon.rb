@@ -7,14 +7,14 @@ require_relative '../modules/validator'
 class PassengerWagon < Wagon
   include Validator
 
-  attr_reader :free_seats, :taked_seats
+  attr_reader :free_seats, :taken_seats
 
   def initialize(all_seats)
     super()
     @type = 'пассажирский'
     @all_seats = all_seats
     @free_seats = @all_seats
-    @taked_seats = 0
+    @taken_seats = 0
     validate!
   end
 
@@ -22,7 +22,7 @@ class PassengerWagon < Wagon
     raise 'Нет свободных мест' if @free_seats.zero?
 
     @free_seats -= 1
-    @taked_seats += 1
+    @taken_seats += 1
   end
 
   private
