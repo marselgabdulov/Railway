@@ -100,7 +100,9 @@ class Train
   end
 
   def each_wagon(&block)
-    @wagons.map(&block)
+    raise 'Вагонов нет' if @wagons.empty?
+
+    @wagons.each(&block)
   end
 
   protected

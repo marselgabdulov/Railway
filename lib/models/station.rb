@@ -42,7 +42,8 @@ class Station
   end
 
   def each_train(&block)
-    @trains.map(&block)
+    raise 'Поездов нет' if @trains.empty?
+    @trains.each(&block)
   end
 
   private

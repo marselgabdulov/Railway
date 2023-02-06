@@ -54,17 +54,15 @@ class CommandInterface
   def show_all_trains
     if @stations.empty?
       puts 'Не создано ни одной станции'
-    elsif @trains.empty?
-      puts 'Не создано ни одного поезда'
     else
       @stations.each do |station|
         puts "На станции '#{station.name}':"
-        if station.trains.empty?
-          puts 'Поездов нет'
-        else
+        begin
           station.each_train do |train|
             puts "#{train.serial_number} #{train.type} вагонов: #{train.wagons.length}"
           end
+        rescue RuntimeError => e
+          puts e.message
         end
       end
     end
@@ -73,15 +71,19 @@ class CommandInterface
   def wagon_list
     if @trains.empty?
       puts 'Не создано ни одного поезда'
-    elsif @trains.last.wagons.empty?
-      puts 'Вагонов еще нет'
     else
-      train = @trains.last
-      train.each_wagon do |w|
-        if train.type == 'грузовой'
-          puts "Вагон номер '#{w.serial_number}', тип #{w.type}, свободно: #{w.free_volume} единиц, занято: #{w.taken_volume} единиц"
-        else
-          puts "Вагон номер '#{w.serial_number}', тип #{w.type}, свободно: #{w.free_seats} мест, занято: #{w.taken_seats} мест"
+      @stations.last.trains.each do |t|
+        t.each_wagon do |w|
+          puts "На станции '#{@stations.last.name}':"
+          begin
+            if t.type == 'грузовой'
+              puts "Вагон номер '#{w.serial_number}', тип #{w.type}, свободно: #{w.free_volume} единиц, занято: #{w.taken_volume} единиц"
+            else
+              puts "Вагон номер '#{w.serial_number}', тип #{w.type}, свободно: #{w.free_seats} мест, занято: #{w.taken_seats} мест"
+            end
+          rescue RuntimeError => e
+            puts e.message
+          end
         end
       end
     end
