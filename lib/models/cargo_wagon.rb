@@ -20,6 +20,7 @@ class CargoWagon < Wagon
 
   def fill_volume(value)
     value = value.to_f
+    raise 'Вагон заполнен' if @free_volume.zero?
     raise 'Вместительность вагона недостаточна' if value > @free_volume
 
     @free_volume -= value

@@ -12,7 +12,7 @@ describe PassengerWagon do
       @wagon.take_seat
 
       expect(@wagon.free_seats).to eq(29)
-      expect(@wagon.taked_seats).to eq(1)
+      expect(@wagon.taken_seats).to eq(1)
     end
 
     it 'rases error' do

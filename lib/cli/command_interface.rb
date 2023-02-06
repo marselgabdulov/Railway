@@ -87,6 +87,20 @@ class CommandInterface
     end
   end
 
+  def fill_wagon
+    if @trains.empty?
+      puts 'Не создано ни одного поезда'
+    elsif @trains.last.wagons.empty?
+      puts 'Вагонов еще нет'
+    else
+      if @trains.last.wagons.last.type == 'грузовой'
+        fill_cargo_wagon
+      else
+        fill_passenger_wagon
+      end
+    end
+  end
+
   def new_route
     puts 'Введите начало машрута'
     start = gets.chomp
@@ -228,6 +242,31 @@ class CommandInterface
   # Методы ниже служебные, поэтому я их закрыл для внешнего доступа
   private
 
+  def fill_cargo_wagon
+    wagon = @trains.last.wagons.last
+    puts "В вагоне #{wagon.free_volume} единиц свободного места. Введите количество погружаемого груза"
+    while (value = gets.chomp)
+      begin
+        wagon.fill_volume(value)
+        puts "Cвободного места: #{wagon.free_volume} единиц. Занято: #{wagon.taken_volume}"
+        break
+      rescue RuntimeError => e
+        puts e.message
+        break
+      end
+    end
+  end
+
+  def fill_passenger_wagon
+    wagon = @trains.last.wagons.last
+    begin
+      wagon.take_seat
+      puts "Свободных мест #{wagon.free_seats}, занятых мест #{wagon.taken_seats}"
+    rescue RuntimeError => e
+      puts e.message
+    end
+  end
+
   def train_errors
     if @routes.empty? && @trains.empty?
       puts 'Не созданы ни маршрут, ни поезд'
@@ -288,7 +327,7 @@ class CommandInterface
     puts 'Введите объем вагона'
     value = gets.chomp.to_f
     wagon = CargoWagon.new(value)
-    puts "Грузовой вагон объемом #{value} единиц создан"
+    puts "Грузовой вагон создан, объем: #{value} единиц "
     wagon
   end
 
@@ -296,7 +335,7 @@ class CommandInterface
     puts 'Введите количество мест'
     seats = gets.chomp.to_i
     wagon = PassengerWagon.new(seats)
-    puts "Пассажирский вагон на #{seats} мест создан"
+    puts "Пассажирский вагон создан, мест: #{seats}"
     wagon
   end
 

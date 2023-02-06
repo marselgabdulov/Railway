@@ -44,6 +44,8 @@ while (line = $stdin.gets.rstrip)
     commands.show_all_trains
   when 'список вагонов'
     commands.wagon_list
+  when 'заполнить вагон'
+    commands.fill_wagon
   when 'список станций'
     commands.show_stations
   when 'помощь'
