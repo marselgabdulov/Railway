@@ -36,4 +36,14 @@ describe CargoTrain do
       end.to raise_error(RuntimeError, 'Поезд в движении. Операция невозможна')
     end
   end
+
+  context '#each_wagon' do
+    it 'returns each wagon type' do
+      wagon = CargoWagon.new(100)
+      @cargo_train.add_wagon(@cargo_wagon)
+      @cargo_train.add_wagon(wagon)
+
+      expect(@cargo_train.each_wagon(&:type)).to eq([@cargo_wagon.type, "грузовой"])
+    end
+  end
 end

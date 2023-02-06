@@ -99,6 +99,10 @@ class Train
     end
   end
 
+  def each_wagon(&block)
+    @wagons.collect(&block)
+  end
+
   protected
 
   def no_route_error
