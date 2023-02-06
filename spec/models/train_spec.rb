@@ -15,7 +15,7 @@ describe Train do
     route = Route.new(@station_one, @station_two)
     route.add(@station_three)
     route.add(@station_four)
-    @wagon = CargoWagon.new
+    @wagon = CargoWagon.new(100)
 
     @train.accept_route(route)
   end

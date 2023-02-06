@@ -118,28 +118,24 @@ class CommandInterface
   def train_forward
     train = @trains.last
     train_errors do
-      begin
-        train.forward
-        train.previous_station.remove(train)
-        train.current_station.take(train)
-        train_position_message
-      rescue RuntimeError => e
-        puts e.message
-      end
+      train.forward
+      train.previous_station.remove(train)
+      train.current_station.take(train)
+      train_position_message
+    rescue RuntimeError => e
+      puts e.message
     end
   end
 
   def train_backward
     train = @trains.last
     train_errors do
-      begin
-        train.backward
-        train.next_station.remove(train)
-        train.current_station.take(train)
-        train_position_message
-      rescue RuntimeError => e
-        puts e.message
-      end
+      train.backward
+      train.next_station.remove(train)
+      train.current_station.take(train)
+      train_position_message
+    rescue RuntimeError => e
+      puts e.message
     end
   end
 

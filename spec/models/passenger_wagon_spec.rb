@@ -7,7 +7,7 @@ describe PassengerWagon do
     @wagon = PassengerWagon.new(30)
   end
 
-  context '#add_wagon' do
+  context '#take_seat' do
     it 'takes a seat' do
       @wagon.take_seat
 
