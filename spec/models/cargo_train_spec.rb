@@ -9,7 +9,7 @@ describe CargoTrain do
   before(:each) do
     @cargo_train = CargoTrain.new('CT0-11')
     @cargo_wagon = CargoWagon.new
-    @passenger_wagon = PassengerWagon.new
+    @passenger_wagon = PassengerWagon.new(30)
   end
 
   context '#add_wagon' do

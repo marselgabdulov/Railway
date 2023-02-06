@@ -8,7 +8,7 @@ require_relative '../../lib/models/passenger_wagon'
 describe PassengerTrain do
   before(:each) do
     @passenger_train = PassengerTrain.new('PT1-11')
-    @passenger_wagon = PassengerWagon.new
+    @passenger_wagon = PassengerWagon.new(30)
     @cargo_wagon = CargoWagon.new
   end
 
