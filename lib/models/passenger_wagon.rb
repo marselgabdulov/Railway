@@ -1,9 +1,12 @@
 # frozen_string_literal: true
 
 require_relative 'wagon'
+require_relative '../modules/validator'
 
 # Passenger Wagon
 class PassengerWagon < Wagon
+  include Validator
+
   attr_reader :free_seats, :taked_seats
 
   def initialize(all_seats)
@@ -12,6 +15,7 @@ class PassengerWagon < Wagon
     @all_seats = all_seats
     @free_seats = @all_seats
     @taked_seats = 0
+    validate!
   end
 
   def take_seat
@@ -19,5 +23,11 @@ class PassengerWagon < Wagon
 
     @free_seats -= 1
     @taked_seats += 1
+  end
+
+  private
+
+  def validate!
+    raise 'Количество мест должно быть целым числом' unless @all_seats.instance_of?(::Integer)
   end
 end
