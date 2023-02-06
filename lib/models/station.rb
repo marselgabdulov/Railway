@@ -43,6 +43,7 @@ class Station
 
   def each_train(&block)
     raise 'Поездов нет' if @trains.empty?
+
     @trains.each(&block)
   end
 

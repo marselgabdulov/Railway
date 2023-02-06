@@ -72,10 +72,10 @@ class CommandInterface
     if @trains.empty?
       puts 'Не создано ни одного поезда'
     else
-      @stations.last.trains.each do |t|
-        t.each_wagon do |w|
-          puts "На станции '#{@stations.last.name}':"
-          begin
+      @stations.each do |s|
+        puts "На станции '#{s.name}':"
+        s.each_train do |t|
+          t.each_wagon do |w|
             if t.type == 'грузовой'
               puts "Вагон номер '#{w.serial_number}', тип #{w.type}, свободно: #{w.free_volume} единиц, занято: #{w.taken_volume} единиц"
             else
@@ -84,6 +84,8 @@ class CommandInterface
           rescue RuntimeError => e
             puts e.message
           end
+        rescue RuntimeError => e
+          puts e.message
         end
       end
     end
