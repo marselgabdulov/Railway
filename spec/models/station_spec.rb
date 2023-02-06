@@ -59,4 +59,10 @@ describe Station do
 
     expect(passenger_trains.length).to eq(2)
   end
+
+  context '#each_train' do
+    it 'returns each train serial_number' do
+      expect(@station.each_train { |t| t.serial_number }).to eq([@first_train.serial_number, @second_train.serial_number, @third_train.serial_number, @fourth_train.serial_number])
+    end
+  end
 end

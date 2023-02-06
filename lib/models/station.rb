@@ -41,6 +41,10 @@ class Station
     @@stations
   end
 
+  def each_train(&block)
+    @trains.collect(&block)
+  end
+
   private
 
   def validate!
