@@ -62,8 +62,14 @@ describe Station do
 
   context '#each_train' do
     it 'returns each train serial_number' do
-      expect(@station.each_train(&:serial_number)).to eq([@first_train.serial_number, @second_train.serial_number,
-                                                          @third_train.serial_number, @fourth_train.serial_number])
+      expect(@station.each_train(&:serial_number)).to eq([@first_train, @second_train,
+                                                          @third_train, @fourth_train])
+    end
+
+    it 'raises error' do
+      station = Station.new('Тула')
+
+      expect { station.each_train }.to raise_error(RuntimeError, 'Поездов нет')
     end
   end
 end
