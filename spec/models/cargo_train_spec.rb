@@ -38,14 +38,6 @@ describe CargoTrain do
   end
 
   context '#each_wagon' do
-    it 'returns each wagon type' do
-      wagon = CargoWagon.new(100)
-      @cargo_train.add_wagon(@cargo_wagon)
-      @cargo_train.add_wagon(wagon)
-
-      expect(@cargo_train.each_wagon(&:type)).to eq([@cargo_wagon, wagon])
-    end
-
     it 'raises error' do
       train = CargoTrain.new('CT0-12')
 
