@@ -12,7 +12,6 @@ class CommandInterface
   attr_reader :stations, :trains, :routes
 
   def initialize
-    # Эти переменные нужны для хранения состояния.
     @stations = []
     @trains = []
     @routes = []
@@ -41,15 +40,34 @@ class CommandInterface
   end
 
   def new_train
-    puts 'Введите 1 чтобы создать грузовой или что угодно для создания пассажирского'
-    type = gets.chomp
-    puts 'Введите серийный номер в формате: 3 цифры или буквы, необязятельный дефис, и 2 цифры или буквы.'
-    puts 'Например, 001-ПП'
-    type == '1' ? create_train('CargoTrain') : create_train('PassengerTrain')
+    if @stations.empty?
+      puts 'Сперва создайте станцию'
+    else
+      puts 'Введите 1 чтобы создать грузовой или что угодно для создания пассажирского'
+      type = gets.chomp
+      puts 'Введите серийный номер в формате: 3 цифры или буквы, необязятельный дефис, и 2 цифры или буквы.'
+      puts 'Например, 001-ПП'
+      type == '1' ? create_train('CargoTrain') : create_train('PassengerTrain')
+    end
   end
 
-  def show_trains
-    p(@trains.collect { |t| "#{t.type} #{t.serial_number}" })
+  def show_all_trains
+    if @stations.empty?
+      puts 'Не создано ни одной станции'
+    elsif @trains.empty?
+      puts 'Не создано ни одного поезда'
+    else
+      @stations.each do |station|
+        puts "'#{station.name}':"
+        if station.trains.empty?
+          puts 'Поездов нет'
+        else
+          station.each_train do |train|
+            puts "#{train.serial_number} #{train.type} вагонов: #{train.wagons.length}"
+          end
+        end
+      end
+    end
   end
 
   def new_route
@@ -226,7 +244,7 @@ class CommandInterface
         puts e.message
       end
     else
-      puts "Станция '#{name}' уже существует"
+      find_object(@stations, 'name', name)
     end
   end
 
@@ -236,6 +254,7 @@ class CommandInterface
         begin
           train = Kernel.const_get(type).new(serial_number)
           @trains << train
+          @stations.last.trains << train
           puts "Поезд #{serial_number} создан"
           break
         rescue RuntimeError => e
