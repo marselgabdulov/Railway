@@ -1,0 +1,11 @@
+AllCops:
+  NewCops: enable
+
+Style/ClassVars:
+  Enabled: false
+
+Metrics/BlockLength:
+  AllowedMethods: ['describe', 'context']
+
+Metrics/ClassLength:
+  Enabled: false
