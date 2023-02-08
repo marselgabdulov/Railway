@@ -112,7 +112,7 @@ class Train
   end
 
   def validate!
-    raise 'Невалидный формат номера' unless valid_serial_number?(@serial_number)
+    raise 'Введите серийный номер в формате ХХХ-ХХ или ХХХХХ' unless valid_serial_number?(@serial_number)
   end
 
   def valid_serial_number?(serial_number)

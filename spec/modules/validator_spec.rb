@@ -9,6 +9,8 @@ describe Validator do
   end
 
   it 'fails validation' do
-    expect { Train.new('001-C').send(:valid?) }.to raise_error(RuntimeError, 'Невалидный формат номера')
+    expect do
+      Train.new('001-C').send(:valid?)
+    end.to raise_error(RuntimeError, 'Введите серийный номер в формате ХХХ-ХХ или ХХХХХ')
   end
 end

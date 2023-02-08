@@ -241,16 +241,15 @@ class CommandInterface
     Kernel.exit
   end
 
-  # Методы ниже служебные, поэтому я их закрыл для внешнего доступа
   private
 
   def fill_cargo_wagon
     wagon = @trains.last.wagons.last
-    puts "В вагоне #{wagon.free_volume} единиц свободного места. Введите количество погружаемого груза"
+    puts "Свободного места: #{wagon.free_volume}. Введите количество погружаемого груза"
     while (value = gets.chomp)
       begin
         wagon.fill_volume(value)
-        puts "Cвободного места: #{wagon.free_volume} единиц. Занято: #{wagon.taken_volume}"
+        puts "Cвободного места: #{wagon.free_volume}. Занято: #{wagon.taken_volume}"
         break
       rescue RuntimeError => e
         puts e.message
@@ -285,12 +284,6 @@ class CommandInterface
     puts "Поезд номер #{@trains.last.serial_number} находится на станции #{@routes.last.stations[@trains.last.current_station_index].name}"
   end
 
-  def trains_lists
-    puts "На станции '#{@stations.last.name}'"
-    p "Грузовые: #{@stations.last.trains.filter { |t| t.type == 'грузовой' }.collect(&:serial_number)}"
-    p "Пассажирские: #{@stations.last.trains.filter { |t| t.type == 'пассажирский' }.collect(&:serial_number)}"
-  end
-
   def create_station(name)
     if find_object(@stations, 'name', name).nil?
       begin
@@ -317,7 +310,6 @@ class CommandInterface
           break
         rescue RuntimeError => e
           puts e.message
-          puts 'Введите серийный номер в формате ХХХ-ХХ'
         end
       else
         puts 'Поезд с таким серийным номером уже существует'

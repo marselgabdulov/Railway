@@ -1,5 +1,6 @@
 AllCops:
   NewCops: enable
+  SuggestExtensions: false
 
 Style/ClassVars:
   Enabled: false
@@ -9,3 +10,15 @@ Metrics/BlockLength:
 
 Metrics/ClassLength:
   Enabled: false
+
+Layout/LineLength:
+  Exclude:
+    - lib/cli/command_interface.rb
+
+Metrics/MethodLength:
+  Exclude:
+    - lib/cli/command_interface.rb
+
+Metrics/AbcSize:
+  Exclude:
+    - lib/cli/command_interface.rb
