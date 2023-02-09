@@ -41,13 +41,13 @@ while (line = $stdin.gets.rstrip)
   when 'отцепить вагон'
     commands.remove_wagon
   when 'список поездов'
-    commands.show_all_trains
+    commands.trains_list
   when 'список вагонов'
-    commands.wagon_list
+    commands.wagons_list
   when 'заполнить вагон'
     commands.fill_wagon
   when 'список станций'
-    commands.show_stations
+    commands.stations_list
   when 'помощь'
     commands.instruction
   when 'выход'

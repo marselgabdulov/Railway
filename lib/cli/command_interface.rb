@@ -23,26 +23,20 @@ class CommandInterface
     create_station(name)
   end
 
-  def show_stations
-    if @stations.empty?
-      puts 'Еще не создано ни одной станции'
-    else
+  def stations_list
+    guard_message(stations: true) do
       p @stations.collect(&:name)
     end
   end
 
   def show_current_station
-    if @stations.empty?
-      puts 'Еще не создано ни одной станции'
-    else
+    guard_message(stations: true) do
       puts "Текущая станция '#{@stations.last.name}'"
     end
   end
 
   def new_train
-    if @stations.empty?
-      puts 'Сперва создайте станцию'
-    else
+    guard_message(stations: true) do
       puts 'Введите 1 чтобы создать грузовой или что угодно для создания пассажирского'
       type = gets.chomp
       puts 'Введите серийный номер в формате: 3 цифры или буквы, необязятельный дефис, и 2 цифры или буквы.'
@@ -51,10 +45,8 @@ class CommandInterface
     end
   end
 
-  def show_all_trains
-    if @stations.empty?
-      puts 'Не создано ни одной станции'
-    else
+  def trains_list
+    guard_message(stations: true) do
       @stations.each do |station|
         puts "На станции '#{station.name}':"
         begin
@@ -68,10 +60,8 @@ class CommandInterface
     end
   end
 
-  def wagon_list
-    if @trains.empty?
-      puts 'Не создано ни одного поезда'
-    else
+  def wagons_list
+    guard_message(trains: true) do
       @stations.each do |s|
         puts "На станции '#{s.name}':"
         s.each_train do |t|
@@ -92,14 +82,14 @@ class CommandInterface
   end
 
   def fill_wagon
-    if @trains.empty?
-      puts 'Не создано ни одного поезда'
-    elsif @trains.last.wagons.empty?
-      puts 'Вагонов еще нет'
-    elsif @trains.last.wagons.last.type == 'грузовой'
-      fill_cargo_wagon
-    else
-      fill_passenger_wagon
+    guard_message(trains: true) do
+      if @trains.last.wagons.empty?
+        puts 'Вагонов еще нет'
+      elsif @trains.last.wagons.last.type == 'грузовой'
+        fill_cargo_wagon
+      else
+        fill_passenger_wagon
+      end
     end
   end
 
@@ -120,17 +110,13 @@ class CommandInterface
   end
 
   def show_route
-    if @routes.empty?
-      puts 'Маршрут не создан'
-    else
-      puts "Маршрут #{@routes.last.stations_list}"
+    guard_message(routes: true) do
+      puts "Маршрут '#{@routes.last.stations_list}'"
     end
   end
 
   def add_to_route
-    if @routes.empty?
-      puts 'Маршрут не создан'
-    else
+    guard_message(routes: true) do
       puts 'Введите название станции'
       name = gets.chomp
 
@@ -142,9 +128,7 @@ class CommandInterface
   end
 
   def remove_from_route
-    if @routes.empty?
-      puts 'Маршрут не создан'
-    else
+    guard_message(routes: true) do
       puts 'Введите название станции'
       name = gets.chomp
       begin
@@ -160,7 +144,7 @@ class CommandInterface
   end
 
   def route_to_train
-    train_errors do
+    guard_message(routes: true, trains: true) do
       @trains.last.accept_route(@routes.last)
       puts "Поезду #{@trains.last.serial_number} назначен маршрут #{@routes.last.stations_list}"
     end
@@ -168,7 +152,7 @@ class CommandInterface
 
   def train_forward
     train = @trains.last
-    train_errors do
+    guard_message(routes: true, trains: true) do
       train.forward
       train.previous_station.remove(train)
       train.current_station.take(train)
@@ -180,7 +164,7 @@ class CommandInterface
 
   def train_backward
     train = @trains.last
-    train_errors do
+    guard_message(routes: true, trains: true) do
       train.backward
       train.next_station.remove(train)
       train.current_station.take(train)
@@ -191,9 +175,7 @@ class CommandInterface
   end
 
   def add_wagon
-    if @trains.empty?
-      puts 'Нельзя прицепить вагон к несуществующему поезду'
-    else
+    guard_message(trains: true) do
       wagon = @trains.last.type == 'грузовой' ? create_cargo_wagon : create_passenger_wagon
       begin
         @trains.last.add_wagon(wagon)
@@ -205,15 +187,11 @@ class CommandInterface
   end
 
   def remove_wagon
-    if @trains.empty?
-      puts 'Нельзя отцепить вагон от несуществующего поезда'
-    else
-      begin
-        @trains.last.remove_wagon
-        puts 'Вагон отцеплен'
-      rescue RuntimeError => e
-        puts e.message
-      end
+    guard_message(trains: true) do
+      @trains.last.remove_wagon
+      puts 'Вагон отцеплен'
+    rescue RuntimeError => e
+      puts e.message
     end
   end
 
@@ -243,6 +221,18 @@ class CommandInterface
 
   private
 
+  def guard_message(options = { stations: false, trains: false, routes: false })
+    if options[:stations] && @stations.empty?
+      puts 'Не создано ни одной станции'
+    elsif options[:trains] && @trains.empty?
+      puts 'Не создано ни одного поезда'
+    elsif options[:routes] && @routes.empty?
+      puts 'Не создано ни одного маршрута'
+    else
+      yield
+    end
+  end
+
   def fill_cargo_wagon
     wagon = @trains.last.wagons.last
     puts "Свободного места: #{wagon.free_volume}. Введите количество погружаемого груза"
@@ -268,24 +258,13 @@ class CommandInterface
     end
   end
 
-  def train_errors
-    if @routes.empty? && @trains.empty?
-      puts 'Не созданы ни маршрут, ни поезд'
-    elsif @routes.empty?
-      puts 'Не создан маршрут'
-    elsif @trains.empty?
-      puts 'Не создан поезд'
-    else
-      yield
-    end
-  end
-
   def train_position_message
     puts "Поезд номер #{@trains.last.serial_number} находится на станции #{@routes.last.stations[@trains.last.current_station_index].name}"
   end
 
   def create_station(name)
-    if find_object(@stations, 'name', name).nil?
+    station = find_object(@stations, 'name', name)
+    if station.nil?
       begin
         station = Station.new(name)
         @stations << station
@@ -295,7 +274,7 @@ class CommandInterface
         puts e.message
       end
     else
-      find_object(@stations, 'name', name)
+      station
     end
   end
 
