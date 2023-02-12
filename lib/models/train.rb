@@ -3,17 +3,20 @@
 require_relative '../modules/producer'
 require_relative '../modules/instance_counter'
 require_relative '../modules/validator'
+require_relative '../modules/accessors'
 
 # Train
 class Train
   include Producer
   include InstanceCounter
   include Validator
+  extend Accessors
 
   attr_reader :speed, :type, :wagons, :serial_number
-  attr_accessor :route, :current_station_index
 
-  SN_PATTERN = /^[a-zA-Zа-яА-Я0-9]{3}(-)?[a-zA-Zа-яА-Я0-9]{2}$/.freeze
+  attr_accessor_with_history :route, :current_station_index
+
+  SN_PATTERN = /^[a-zA-Zа-яА-Я0-9]{3}(-)?[a-zA-Zа-яА-Я0-9]{2}$/
   @@trains = []
 
   def initialize(serial_number)
