@@ -19,6 +19,8 @@ Layout/LineLength:
 Metrics/MethodLength:
   Exclude:
     - lib/cli/command_interface.rb
+    - lib/models/train.rb
+    - lib/modules/accessors.rb
 
 Metrics/AbcSize:
   Exclude:

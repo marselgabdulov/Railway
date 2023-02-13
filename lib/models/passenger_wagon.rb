@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 require_relative 'wagon'
-require_relative '../modules/validator'
+require_relative '../modules/validation'
 
 # Passenger Wagon
 class PassengerWagon < Wagon
-  include Validator
+  include Validation
 
   attr_reader :free_seats, :taken_seats
 
@@ -15,6 +15,7 @@ class PassengerWagon < Wagon
     @all_seats = all_seats
     @free_seats = @all_seats
     @taken_seats = 0
+    validate :all_seats, :presence
     validate!
   end
 

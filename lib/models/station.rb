@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 require_relative '../modules/instance_counter'
-require_relative '../modules/validator'
+require_relative '../modules/validation'
 
 # class Station
 class Station
   include InstanceCounter
-  include Validator
+  include Validation
 
   attr_reader :name, :trains
 
@@ -15,8 +15,9 @@ class Station
   def initialize(name)
     @name = name
     @trains = []
-    @@stations << self
+    validate :name, :presence
     validate!
+    @@stations << self
     register_instance
   end
 
@@ -45,11 +46,5 @@ class Station
     raise 'Поездов нет' if @trains.empty?
 
     @trains.each(&block)
-  end
-
-  private
-
-  def validate!
-    raise 'Наименование станции должно быть строкой' unless @name.instance_of?(::String)
   end
 end

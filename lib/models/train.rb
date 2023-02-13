@@ -2,14 +2,14 @@
 
 require_relative '../modules/producer'
 require_relative '../modules/instance_counter'
-require_relative '../modules/validator'
+require_relative '../modules/validation'
 require_relative '../modules/accessors'
 
 # Train
 class Train
   include Producer
   include InstanceCounter
-  include Validator
+  include Validation
   extend Accessors
 
   attr_reader :speed, :type, :wagons, :serial_number
@@ -26,6 +26,8 @@ class Train
     @wagons = []
     @current_station_index = nil
     @type = nil
+    validate :serial_number, :presence
+    validate :serial_number, :format, SN_PATTERN
     validate!
     @@trains << self
     register_instance
@@ -112,13 +114,5 @@ class Train
 
   def no_route_error
     raise 'Маршрут не задан' if @route.nil?
-  end
-
-  def validate!
-    raise 'Введите серийный номер в формате ХХХ-ХХ или ХХХХХ' unless valid_serial_number?(@serial_number)
-  end
-
-  def valid_serial_number?(serial_number)
-    SN_PATTERN.match?(serial_number)
   end
 end

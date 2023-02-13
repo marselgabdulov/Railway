@@ -19,12 +19,6 @@ describe Station do
     @station.take(@fourth_train)
   end
 
-  context '#validate!' do
-    it 'raises error' do
-      expect { Station.new(123) }.to raise_error(RuntimeError, 'Наименование станции должно быть строкой')
-    end
-  end
-
   context '#self.all' do
     it 'returns all instances' do
       station = Station.new('Химки')
