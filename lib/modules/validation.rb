@@ -10,10 +10,6 @@ module Validation
       @validators ||= []
       validator = [attribute, type, option]
       @validators << validator unless @validators.include?(validator)
-      case type
-      when :presence
-        presence(attribute)
-      end
     end
 
     def presence(*args)
