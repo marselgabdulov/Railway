@@ -38,10 +38,7 @@ module Validation
     protected
 
     def validate(*args)
-      attribute = args[0]
-      validation = args[1]
-      options = args[2]
-      self.class.validate(attribute, validation, options)
+      self.class.validate(*args)
     end
 
     def validate!
