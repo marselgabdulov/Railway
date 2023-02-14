@@ -13,16 +13,23 @@ module Validation
     end
 
     def presence(*args)
-      attribute = args[0]
-      'Атрибут должен быть' if attribute.nil? || attribute.to_s.strip.empty?
+      attr_name = args[0]
+      attr_value = args[1]
+      "Атрибут #{attr_name} не должен быть пустым" if attr_value.nil? || attr_value.to_s.strip.empty?
     end
 
-    def format(attribute, target_format)
-      'Неверный формат' unless attribute.match(target_format)
+    def format(*args)
+      attr_name = args[0]
+      attr_value = args[1]
+      target_format = args[2]
+      "Неверный формат #{attr_name}" unless attr_value.match(target_format)
     end
 
-    def type(attribute, target_type)
-      "Атрибут должен быть #{target_type}" unless attribute.is_a?(target_type)
+    def type(*args)
+      attr_name = args[0]
+      attr_value = args[1]
+      target_type = args[2]
+      "#{attr_name} должен быть #{target_type}" unless attr_value.is_a?(target_type)
     end
   end
 
@@ -37,14 +44,12 @@ module Validation
 
     protected
 
-    def validate(*args)
-      self.class.validate(*args)
-    end
-
     def validate!
       errors = []
       self.class.validators.each do |attribute, validation, options|
-        errors << self.class.send(validation, instance_variable_get("@#{attribute}"), options)
+        attr_name = attribute
+        attr_value = instance_variable_get("@#{attribute}")
+        errors << self.class.send(validation, attr_name, attr_value, options)
       end
       raise errors.join(', ') if errors.any?
     end

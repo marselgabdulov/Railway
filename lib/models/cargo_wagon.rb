@@ -8,6 +8,8 @@ class CargoWagon < Wagon
   include Validation
 
   attr_reader :free_volume, :taken_volume
+  validate :full_volume, :presence
+
 
   def initialize(full_volume)
     super()
@@ -15,7 +17,6 @@ class CargoWagon < Wagon
     @full_volume = full_volume.to_f
     @free_volume = @full_volume
     @taken_volume = 0.0
-    validate :full_volume, :presence
     validate!
   end
 

@@ -17,6 +17,10 @@ class Train
   attr_accessor_with_history :route, :current_station_index
 
   SN_PATTERN = /^[a-zA-Zа-яА-Я0-9]{3}(-)?[a-zA-Zа-яА-Я0-9]{2}$/
+
+  validate :serial_number, :presence
+  validate :serial_number, :format, SN_PATTERN
+
   @@trains = []
 
   def initialize(serial_number)
@@ -26,8 +30,6 @@ class Train
     @wagons = []
     @current_station_index = nil
     @type = nil
-    validate :serial_number, :presence
-    validate :serial_number, :format, SN_PATTERN
     validate!
     @@trains << self
     register_instance

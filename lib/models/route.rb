@@ -10,14 +10,15 @@ class Route
 
   attr_reader :start, :finish, :stations
 
+  validate :start, :presence
+  validate :finish, :presence
+  validate :start, :type, Station
+  validate :finish, :type, Station
+
   def initialize(start, finish)
     @start = start
     @finish = finish
     @stations = [start, finish]
-    validate :start, :presence
-    validate :finish, :presence
-    validate :start, :type, Station
-    validate :finish, :type, Station
     validate!
     register_instance
   end

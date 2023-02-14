@@ -8,16 +8,16 @@ require_relative '../../lib/models/route'
 describe Validation do
   context 'presence' do
     it 'raises error' do
-      expect { Station.new('') }.to raise_error(StandardError, 'Атрибут должен быть')
+      expect { Station.new('') }.to raise_error(StandardError, 'Атрибут name не должен быть пустым')
     end
   end
 
-  context 'presence' do
+  context 'format' do
     it 'raises error' do
       # matches
       expect { Train.new('111') }.to raise_error(RuntimeError)
 
-      # expected RuntimeError with "Неверный формат", got #<RuntimeError: , Неверный формат>
+      # expected RuntimeError with "Неверный формат serial_number", got #<RuntimeError: , 'Неверный формат serial_number'>
       # expect { Train.new('111') }.to raise_error(RuntimeError, 'Неверный формат')
     end
   end

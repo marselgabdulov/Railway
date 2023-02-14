@@ -9,13 +9,14 @@ class PassengerWagon < Wagon
 
   attr_reader :free_seats, :taken_seats
 
+  validate :all_seats, :presence
+
   def initialize(all_seats)
     super()
     @type = 'пассажирский'
     @all_seats = all_seats
     @free_seats = @all_seats
     @taken_seats = 0
-    validate :all_seats, :presence
     validate!
   end
 
